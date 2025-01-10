@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Cashier\Billable;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
 class Users extends Authenticatable implements FilamentUser
 {
@@ -46,12 +47,12 @@ class Users extends Authenticatable implements FilamentUser
         'email_verified_at' => 'datetime',
     ];
 
-    public function canAccessFilament() : bool {
+    public function canAccessPanel(Panel $panel): bool
+    {
         return $this->is_admin;
     }
-
     public function billingDetails(): HasOne
     {
-        return $this->hasOne(BillingDetail::class);
+        return $this->hasOne(BillingDetails::class);
     }
 }

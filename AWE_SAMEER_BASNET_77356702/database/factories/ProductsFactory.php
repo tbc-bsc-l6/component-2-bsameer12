@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Products>
  */
-class ProductFactory extends Factory
+class ProductsFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -33,7 +33,7 @@ class ProductFactory extends Factory
                 $this->faker->imageUrl(640, 480, 'products', true),
                 $this->faker->imageUrl(640, 480, 'products', true),
             ]), // Multiple images encoded as JSON
-            ''
+            
         ];
     }
 }

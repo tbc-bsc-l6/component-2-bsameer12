@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Product;
+use App\Models\Products;
 use Livewire\Component;
 use Cart as CartFacade;
 use Illuminate\Http\Request;

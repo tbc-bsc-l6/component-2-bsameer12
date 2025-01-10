@@ -24,6 +24,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Drop the pivot table first
         Schema::dropIfExists('categories');
     }
 };
