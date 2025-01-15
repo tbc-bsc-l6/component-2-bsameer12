@@ -1,6 +1,6 @@
-<header class="header-area header-style-1 header-height-2 px-20 shadow-sm" style="background-color: #FF5733; color: white;">
-    <div class="header-middle d-none d-lg-block py-3" style="background-color: #FF5733; color:white">
-        <div class="container" style="background-color: #FF5733; color:white">
+<header class="header-area header-style-1 header-height-2 px-20 shadow-sm">
+    <div class="header-middle d-none d-lg-block py-3">
+        <div class="container">
             <div class="header-wrap flex justify-between items-center">
                 <div class="logo w-[12rem]">
                     <x-application-logo></x-application-logo>
@@ -13,13 +13,13 @@
                 <div class="header-action-right">
                     <div class="header-action-2">
                         @auth
-                            <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block" >
+                            <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">
                                 <nav class="">
                                     <ul class="">
                                         <li>
-                                            <h1 class="text-black font-bold text-[1rem]" style="color:white">Hi, {{ Auth::user()->name }}</h1>
+                                            <h1 class="text-black font-bold text-[1rem]">Hi, {{ Auth::user()->name }}</h1>
                                         </li>
-                                        <li ><a href="#" style="color:white">My Account<i class="fi-rs-angle-down"></i></a>
+                                        <li><a href="#">My Account<i class="fi-rs-angle-down"></i></a>
                                             <ul class="sub-menu">
                                                 @if (Auth::user()->is_admin)
                                                     <li><a href="/admin">Admin Dashboard</a></li>
@@ -41,15 +41,15 @@
                                 </nav>
                             </div>
                             @else
-                            <a href="{{ route('login') }}" class="pr-4 text-md font-semibold " style="color:white">Log
+                            <a href="{{ route('login') }}" class="pr-4 text-md font-semibold ">Log
                                 in</a>
 
                                 @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="btn btn-sm btn-default" style="color:white background-color: #FF5733;">Register</a>
+                                <a href="{{ route('register') }}" class="btn btn-sm btn-default">Register</a>
                                 @endif
                                 @endauth
                                 <div class="header-action-icon-2 ml-10">
-                                    <a class="mini-cart-icon" style="color:white" href="{{ route('cart') }}">
+                                    <a class="mini-cart-icon" href="{{ route('cart') }}">
                                         {{-- <img alt="Yusuf Isawi" src="{{ asset('assets/imgs/theme/icons/icon-cart.svg') }}"> --}}
                                         <i class="fi-rs-shopping-cart text-3xl"></i>
                                         <span class="pro-count blue">{{Cart::count()}}</span>

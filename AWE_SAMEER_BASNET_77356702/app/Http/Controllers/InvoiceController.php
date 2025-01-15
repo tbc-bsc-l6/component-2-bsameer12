@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Models\Orders;
 use App\Services\InvoiceService;
 use Illuminate\Http\Request;
 
@@ -13,7 +12,7 @@ class InvoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Orders $order, InvoiceService $invoiceService)
+    public function index(Order $order, InvoiceService $invoiceService)
     {
         return $invoiceService->createInvoice($order)->stream();
     }
@@ -37,7 +36,7 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Orders $order)
+    public function show(Order $order)
     {
         //
     }
@@ -45,7 +44,7 @@ class InvoiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Orders $order)
+    public function edit(Order $order)
     {
         //
     }
@@ -53,7 +52,7 @@ class InvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Orders $order)
+    public function update(Request $request, Order $order)
     {
         //
     }
@@ -61,9 +60,8 @@ class InvoiceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Orders $order)
+    public function destroy(Order $order)
     {
         //
     }
 }
-

@@ -11,10 +11,10 @@
                     <p class="text-md">Invoice #{{ $order->id }}</p>
                 </div>
                 <div>
-                    <p class="text-orange-600 font-semibold">OnlineShopping.Com</p>
-                    <p>PathariShanchare-2, Morang, Koshi, Nepal</p>
-                    <p>+977 9824305625</p>
-                    <p>bsameer22@tbc.edu.np</p>
+                    <p class="text-orange-600 font-semibold">SHOPI</p>
+                    <p>Tetouan Shore, ISMO</p>
+                    <p>Tetouan</p>
+                    <p>yusufisawi@gmail.com</p>
                 </div>
             </header>
             <div class="mb-8 text-lg">
@@ -49,19 +49,19 @@
                                 <p>{{ $item->product->brief_description }}</p>
                             </td>
                             <td class="px-4 py-2">{{ $item->quantity }}</td>
-                            <td class="px-4 py-2">Rs.{{ $item->product->price }}</td>
-                            <td class="px-4 py-2">Rs.{{ $item->product->price * $item->quantity }}</td>
+                            <td class="px-4 py-2">${{ $item->product->price }}</td>
+                            <td class="px-4 py-2">${{ $item->product->price * $item->quantity }}</td>
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot class="text-lg">
                     <tr class="font-semibold">
                         <td colspan="4" class="px-4 py-2 text-right">Subtotal:</td>
-                        <td class="px-4 py-2">Rs.{{ $order->total }}</td>
+                        <td class="px-4 py-2">${{ $order->total }}</td>
                     </tr>
                     <tr class="font-semibold text-orange-600">
                         <td colspan="4" class="px-4 py-2 text-right">Total:</td>
-                        <td class="px-4 py-2">Rs.{{ $order->total }}</td>
+                        <td class="px-4 py-2">${{ $order->total }}</td>
                     </tr>
                 </tfoot>
             </table>

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Resources\Form;
+use App\Models\BillingDetail;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,11 +14,10 @@ use App\Filament\Resources\BillingDetailResource\Pages;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\BillingDetailResource\RelationManagers;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
-use App\Models\BillingDetails;
 
 class BillingDetailResource extends Resource
 {
-    protected static ?string $model = BillingDetails::class;
+    protected static ?string $model = BillingDetail::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document';
 

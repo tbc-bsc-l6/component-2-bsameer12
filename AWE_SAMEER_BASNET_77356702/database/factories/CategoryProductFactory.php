@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Categories;
-use App\Models\Products;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 
@@ -26,8 +26,8 @@ class CategoryProductFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function () {
-            $categories = Categories::all();
-            $products = Products::all();
+            $categories = Category::all();
+            $products = Product::all();
 
             foreach ($products as $product) {
                 // Attach only one random category to each product

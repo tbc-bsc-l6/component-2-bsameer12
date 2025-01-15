@@ -39,7 +39,7 @@
                                                     {{ $item->model->brief_description }}
                                                 </p>
                                             </td>
-                                            <td class="price" data-title="Price"><span>Rs.{{ $item->model->price }}
+                                            <td class="price" data-title="Price"><span>${{ $item->model->price }}
                                                 </span></td>
                                             <td class="text-center" data-title="Stock">
                                                 <div
@@ -66,7 +66,7 @@
                                                 </div>
                                             </td>
                                             <td class="text-right" data-title="Cart">
-                                                <span>Rs.{{ $item->subtotal }} </span>
+                                                <span>${{ $item->subtotal }} </span>
                                             </td>
                                             <td class="action" data-title="Remove">
                                                 <form action="{{ route('destroy.item') }}" method="post">
@@ -116,7 +116,7 @@
                                                 <tr>
                                                     <td class="cart_total_label">Cart Subtotal</td>
                                                     <td class="cart_total_amount"><span
-                                                            class="font-lg fw-900 text-brand">Rs.{{ Cart::subtotal() }}</span>
+                                                            class="font-lg fw-900 text-brand">${{ Cart::subtotal() }}</span>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -129,7 +129,7 @@
                                                     <td class="cart_total_amount">
                                                         <i class="ti-gift mr-5"></i>
                                                         <strong class="font-xl text-red-500">
-                                                            Rs.{{ Cart::tax() }}
+                                                            ${{ Cart::tax() }}
                                                         </strong>
                                                     </td>
                                                 </tr>
@@ -137,7 +137,7 @@
                                                     <td class="cart_total_label">Total</td>
                                                     <td class="cart_total_amount">
                                                         <strong><span class="font-xl fw-900 text-brand">
-                                                                Rs.{{ Cart::total() }}
+                                                                ${{ Cart::total() }}
                                                             </span></strong>
                                                     </td>
 

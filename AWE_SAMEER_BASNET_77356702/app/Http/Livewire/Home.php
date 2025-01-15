@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Categories;
-use App\Models\Products;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,7 +14,7 @@ class Home extends Component
 
     private function getProducts($sort, $selectedCategory, $search, $priceFilter)
     {
-        $query = Products::query();
+        $query = Product::query();
 
         if ($selectedCategory) {
             $query->whereHas('categories', function ($query) use ($selectedCategory) {
@@ -65,7 +65,7 @@ class Home extends Component
         $search = $request->input('search');
         $priceFilter = $request->input('range');
         $products = $this->getProducts($sort, $selectedCategory, $search, $priceFilter);
-        $categories = Categories::all();
+        $categories = Category::all();
         return view('livewire.home', [
             'products' => $products,
             'sort' => $sort,

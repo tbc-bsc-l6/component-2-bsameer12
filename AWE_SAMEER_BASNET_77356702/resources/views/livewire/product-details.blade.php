@@ -32,9 +32,9 @@
                                     <h2 class="title-detail text-xl font-semibold pb-2">{{ $product->name }}</h2>
                                     <div class="clearfix product-price-cover">
                                         <div class="product-price primary-color float-left">
-                                            <ins><span class="text-brand">Rs.{{ $product->price }}</span></ins>
+                                            <ins><span class="text-brand">${{ $product->price }}</span></ins>
                                             <ins><span
-                                                    class="old-price font-md ml-15">Rs.{{ $product->old_price }}</span></ins>
+                                                    class="old-price font-md ml-15">${{ $product->old_price }}</span></ins>
                                         </div>
                                     </div>
                                     <div class="bt-1 border-color-1 mt-15 mb-15"></div>

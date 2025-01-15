@@ -9,7 +9,7 @@
                     <form method="post" action="{{route('checkout.order')}}" id="checkoutForm">
                         @csrf
                         <div class="mb-4">
-                            <x-input-label for="country" :value="__('Province *')" />
+                            <x-input-label for="country" :value="__('Country *')" />
                             @include('livewire.countries-select')
                             <x-input-error class="mt-2" :messages="$errors->get('country')" />
                         </div>
@@ -26,7 +26,7 @@
                             <x-input-error class="mt-2" :messages="$errors->get('city')" />
                         </div>
                         <div class="mb-4">
-                            <x-input-label for="state" :value="__('District *')" />
+                            <x-input-label for="state" :value="__('State / County *')" />
                             <x-text-input id="state" name="state" type="text" class="mt-1 block w-full"
                                 autofocus autocomplete="state" value="{{$billingDetails ? $billingDetails->state : ''}}"/>
                             <x-input-error class="mt-2" :messages="$errors->get('state')" />
@@ -75,16 +75,16 @@
                                                 </h5>
                                                 <span class="product-qty">x {{ $i->qty }}</span>
                                             </td>
-                                            <td>Rs.{{ $i->subtotal }}</td>
+                                            <td>${{ $i->subtotal }}</td>
                                         </tr>
                                     @endforeach
                                     <tr>
                                         <th>SubTotal</th>
-                                        <td class="product-subtotal" colspan="2">Rs.{{ Cart::subtotal() }}</td>
+                                        <td class="product-subtotal" colspan="2">${{ Cart::subtotal() }}</td>
                                     </tr>
                                     <tr>
                                         <th>Tax</th>
-                                        <td class="product-subtotal" colspan="2">Rs.{{ Cart::tax() }}</td>
+                                        <td class="product-subtotal" colspan="2">${{ Cart::tax() }}</td>
                                     </tr>
                                     <tr>
                                         <th>Shipping</th>
@@ -93,7 +93,7 @@
                                     <tr>
                                         <th>Total</th>
                                         <td colspan="2" class="product-subtotal"><span
-                                                class="font-xl text-brand fw-900">Rs.{{ Cart::total() }}</span></td>
+                                                class="font-xl text-brand fw-900">${{ Cart::total() }}</span></td>
                                     </tr>
                                 </tbody>
                             </table>

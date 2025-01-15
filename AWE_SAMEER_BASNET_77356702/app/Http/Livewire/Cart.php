@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Products;
+use App\Models\Product;
 use Livewire\Component;
 use Cart as CartFacade;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ class Cart extends Component
 {
     public function addToCart(Request $request)
     {
-        $p = Products::find($request->input('product_id'));
+        $p = Product::find($request->input('product_id'));
         CartFacade::add($p->id, $p->name, 1, $p->price)->associate('App\Models\Product');
         session()->flash('success', 'Item added in Cart');
         return redirect()->route('cart');

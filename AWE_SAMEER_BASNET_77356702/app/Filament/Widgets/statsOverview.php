@@ -2,8 +2,7 @@
 
 namespace App\Filament\Widgets;
 
-
-use App\Models\Orders;
+use App\Models\Order;
 use Filament\Widgets\StatsOverviewWidget\Card;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 
@@ -11,9 +10,9 @@ class statsOverview extends BaseWidget
 {
     protected function getCards(): array
     {
-        $unshippedOrders = Orders::where('status', '!=', 'completed')->count();
-        $totalSales = Orders::where('status', 'completed')->sum('total');
-        $totalSalesLast30Days = Orders::where('status', 'completed')->where('created_at', '>=', now()->subDays(30))->sum('total');
+        $unshippedOrders = Order::where('status', '!=', 'completed')->count();
+        $totalSales = Order::where('status', 'completed')->sum('total');
+        $totalSalesLast30Days = Order::where('status', 'completed')->where('created_at', '>=', now()->subDays(30))->sum('total');
         return [
             Card::make('Last 30 Days', '$'.$totalSalesLast30Days)
             ->description('Total sales for the last 30 days')

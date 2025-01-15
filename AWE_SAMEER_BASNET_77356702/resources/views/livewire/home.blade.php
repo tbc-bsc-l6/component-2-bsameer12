@@ -76,8 +76,8 @@
                                         </h2>
                                         <div class="flex items-center justify-between">
                                             <div class="">
-                                                <p class="text-xl font-bold text-orange-500">Rs.{{ $p->price }}</p>
-                                                <p class="text-md line-through opacity-50">Rs.{{ $p->old_price }}</p>
+                                                <p class="text-xl font-bold text-orange-500">${{ $p->price }}</p>
+                                                <p class="text-md line-through opacity-50">${{ $p->old_price }}</p>
                                             </div>
                                             <div class="show flex justify-end mt-3">
                                                 <form action="{{ route('cart.add') }}" method="post">

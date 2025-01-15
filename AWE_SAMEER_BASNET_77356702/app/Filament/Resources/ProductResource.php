@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Products;
+use App\Models\Product;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
@@ -32,7 +32,7 @@ use App\Filament\Resources\CategoryResource\RelationManagers\CategoriesRelationM
 
 class ProductResource extends Resource
 {
-    protected static ?string $model = Products::class;
+    protected static ?string $model = Product::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
@@ -50,12 +50,12 @@ class ProductResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('price')
                     ->numeric()
-                    ->prefix('Rs.')
+                    ->prefix('$')
                     ->rules(['min:0'])
                     ->required(),
                 Forms\Components\TextInput::make('old_price')
                     ->numeric()
-                    ->prefix('Rs.')
+                    ->prefix('$')
                     ->rules(['min:0'])
                     ->required(),
                 Forms\Components\TextInput::make('quantity')->numeric(),

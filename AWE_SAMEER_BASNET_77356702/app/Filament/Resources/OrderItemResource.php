@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\OrderItem;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
@@ -13,11 +14,10 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\OrderItemResource\RelationManagers;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
-use App\Models\OrderItems;
 
 class OrderItemResource extends Resource
 {
-    protected static ?string $model = OrderItems::class;
+    protected static ?string $model = OrderItem::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 

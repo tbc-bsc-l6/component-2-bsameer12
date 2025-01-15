@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Products;
+use App\Models\Product;
 use Livewire\Component;
 
 class ProductDetails extends Component
 {
     public function render($product_id)
     {
-        $product = Products::find($product_id);
+        $product = Product::find($product_id);
         if (json_decode($product->images) != null) {
             $product->images = json_decode($product->images);
         }

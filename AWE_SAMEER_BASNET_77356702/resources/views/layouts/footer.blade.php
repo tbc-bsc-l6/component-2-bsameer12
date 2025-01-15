@@ -10,13 +10,13 @@
                         </div>
                         <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
                         <p class="wow fadeIn animated">
-                            <strong>Address: </strong>PathariShanchare -2 Morang, Koshi Nepal
+                            <strong>Address: </strong>Tetouan Shore
                         </p>
                         <p class="wow fadeIn animated">
-                            <strong>Phone: </strong>+977 9824305625
+                            <strong>Phone: </strong>+212 682860421
                         </p>
                         <p class="wow fadeIn animated">
-                            <strong>Email: </strong>bsameer22@tbc.edu.np
+                            <strong>Email: </strong>yusufisawi@gmail.com
                         </p>
                     </div>
                 </div>

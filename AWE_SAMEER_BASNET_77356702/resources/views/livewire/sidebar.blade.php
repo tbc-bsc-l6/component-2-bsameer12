@@ -37,7 +37,7 @@
                     <div class="price_slider_amount">
                         <div class="label-input">
                             <span>Range:</span>
-                            <input type="text" id="amount" name="range" placeholder="Required format Rs.xx - Rs.xx">
+                            <input type="text" id="amount" name="range" placeholder="Required format $xx - $xx">
                         </div>
                     </div>
                 </div>

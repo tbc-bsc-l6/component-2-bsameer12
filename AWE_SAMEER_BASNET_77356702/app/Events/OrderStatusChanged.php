@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Orders;
+use App\Models\Order;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -15,7 +15,7 @@ class OrderStatusChanged
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Orders $order;
+    public Order $order;
     /**
      * Create a new event instance.
      */
