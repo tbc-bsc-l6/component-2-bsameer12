@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ControllerAdmin;
+use App\Http\Controllers\ControllerShop;
 use App\Http\Controllers\ControllerUser;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
-
+Route::get('/shop', [ControllerShop::class, 'index'])->name('shop.index');
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/account-dashboard',[ControllerUser::class, 'index'])->name('user.index');
