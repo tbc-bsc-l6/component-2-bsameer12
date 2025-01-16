@@ -297,4 +297,120 @@ class ControllerAdmin extends Controller
         })->save($destination_path.'/'.$filename);
     }
 
+    public function modify_products($id)
+    {
+        $product = Product::find($id);
+        $categories = Category::select('id','name')->orderBy('name')->get();
+        $brands = Brand::select('id','name')->orderBy('name')->get();
+        return view('admin.products_modify',compact('product','categories','brands'));
+    }
+
+    public function update_product(Request $request)
+    {
+        $request->validate(
+            [
+                'id' => 'required|exists:products,id', // Ensure the product ID exists in the database
+                'name' => 'required',
+                'slug' => 'required|unique:products,slug,' . $request->id, // Ignore the current product's slug
+                'short_description' => 'required',
+                'description' => 'required',
+                'regular_price' => 'required',
+                'sale_price' => 'required',
+                'SKU' => 'required',
+                'stock_status' => 'required',
+                'featured' => 'required',
+                'quantity' => 'required',
+                'category_id' => 'required',
+                'brand_id' => 'required',
+                'image' => 'nullable|mimes:png,jpg|max:2048',
+                'images.*' => 'nullable|mimes:png,jpg,jpeg|max:2048'
+            ]
+        );
+
+        // Retrieve the product by its ID
+        $product = Product::findOrFail($request->id);
+
+        // Update product details
+        $product->name = $request->name;
+        $product->slug = Str::slug($request->name);
+        $product->short_description = $request->short_description;
+        $product->description = $request->description;
+        $product->regular_price = $request->regular_price;
+        $product->sales_price = $request->sale_price;
+        $product->SKU = $request->SKU;
+        $product->stock_status = $request->stock_status;
+        $product->featured = $request->featured;
+        $product->quantity = $request->quantity;
+        $product->category_id = $request->category_id;
+        $product->brand_id = $request->brand_id;
+
+        // Handle main image update
+        if ($request->hasFile('image')) {
+            // Delete the old image if it exists
+            if ($product->image && file_exists(public_path("uploads/products/" . $product->image))) {
+                unlink(public_path("uploads/products/" . $product->image));
+            }
+
+            $image = $request->file('image');
+            $file_extension = $image->extension();
+            $file_name = Carbon::now()->timestamp . '.' . $file_extension;
+            $this->SaveProductsImage($image, $file_name);
+            $product->image = $file_name;
+        }
+
+        // Handle gallery images update
+        $gallery_array = $product->images ? explode(',', $product->images) : [];
+        if ($request->hasFile('images')) {
+            $allowedfileExtension = ['jpg', 'png', 'jpeg'];
+            $files = $request->file('images');
+            $counter = count($gallery_array) + 1;
+
+            foreach ($files as $file) {
+                $file_extension = $file->getClientOriginalExtension();
+                $check = in_array($file_extension, $allowedfileExtension);
+                if ($check) {
+                    $file_name = Carbon::now()->timestamp . '_' . uniqid() . '_' . $counter . '.' . $file_extension;
+                    $this->SaveProductsImage($file, $file_name);
+                    array_push($gallery_array, $file_name);
+                    $counter++;
+                }
+            }
+        }
+
+        $product->images = implode(',', $gallery_array);
+
+        // Save the updated product
+        $product->save();
+
+        return redirect()->route('admin.products')->with('status', 'Product ' . $request->name . " has been updated successfully!");
+    }
+
+    public function remove_product($id)
+    {
+        // Find the product by ID
+        $product = Product::findOrFail($id);
+
+        // Delete the main image if it exists
+        if ($product->image && file_exists(public_path("uploads/products/" . $product->image))) {
+            unlink(public_path("uploads/products/" . $product->image));
+        }
+
+        // Delete the gallery images if they exist
+        if ($product->images) {
+            $gallery_images = explode(',', $product->images);
+            foreach ($gallery_images as $image) {
+                if (file_exists(public_path("uploads/products/" . $image))) {
+                    unlink(public_path("uploads/products/" . $image));
+                }
+            }
+        }
+
+        // Delete the product from the database
+        $product->delete();
+
+        return redirect()->route('admin.products')->with('status', 'Product has been deleted successfully!');
+    }
+
+
+
 }
