@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\str;
@@ -199,4 +200,101 @@ class ControllerAdmin extends Controller
         $cat->delete();
         return view('admin.category')->with('status','Category ' . $cat_name . " has been deleted successfully!");;
     }
+
+    public function products()
+    {
+        $products = Product::orderby('created_at','DESC')->paginate(10);
+        return view('admin.products',compact('products'));
+    }
+
+    public function create_products()
+    {
+        $categories = Category::select('id','name')->orderBy('name')->get();
+        $brands = Brand::select('id','name')->orderBy('name')->get();
+        return view('admin.product_create',compact('categories','brands'));
+
+    }
+
+
+    public function save_products(Request $request)
+    {
+        $request->validate(
+            [
+                'name' => 'required',
+                'slug' => 'required|unique:products,slug',
+                'short_description' => 'required',
+                'description' => 'required',
+                'regular_price' => 'required',
+                'sale_price' => 'required',
+                'SKU' => 'required',
+                'stock_status' => 'required',
+                'featured' => 'required',
+                'quantity' => 'required',
+                'category_id' => 'required',
+                'brand_id' => 'required',
+                'image' => 'required|mimes:png,jpg|max:2048',
+                'images.*' => 'nullable|mimes:png,jpg,jpeg|max:2048'
+
+            ]
+            );
+
+            $product = new Product();
+            $product -> name = $request->name;
+            $product -> slug = str::slug($request->name);
+            $product -> short_description = $request->short_description;
+            $product -> description = $request->description;
+            $product -> regular_price = $request->regular_price;
+            $product -> sales_price = $request->sale_price;
+            $product -> SKU = $request->SKU;
+            $product -> stock_status = $request->stock_status;
+            $product -> featured = $request->featured;
+            $product -> quantity = $request->quantity;
+            $product -> category_id = $request->category_id;
+            $product -> brand_id = $request->brand_id;
+            $image = $request->file('image');
+            $file_extension = $request->file('image')->extension();
+            $file_name = Carbon::now()->timestamp.'.'.$file_extension;
+            $this->SaveProductsImage($image, $file_name);
+            $product->image = $file_name;
+            $gallery_array = array();
+            $gallery_images="";
+            $counter = 1;
+            if($request->hasFile('images'))
+            {
+                $allowedfileExtension = ['jpg','png','jpeg'];
+                $files = $request->file('images');
+                foreach($files as $file)
+                {
+                    $file_extension = $file->getClientOriginalExtension();
+                    $check = in_array($file_extension,$allowedfileExtension);
+                    if($check)
+                    {
+                        $file_name = Carbon::now()->timestamp . '_' . uniqid() . '_' . $counter . '.' . $file_extension;
+                        $this->SaveProductsImage($file, $file_name);
+                        array_push($gallery_array,$file_name );
+                        $counter++;
+
+                    }
+                    
+                }
+                $gallery_images = implode(',',$gallery_array);
+            }
+            $product->images = $gallery_images;
+            $product-> save();
+            return redirect()->route('admin.products')->with('status','Product ' . $request->name . " has been added successfully!");
+
+        
+
+    }
+
+    public function SaveProductsImage($image, $filename)
+    {
+        $destination_path = public_path("uploads/products");
+        $img = Image::read($image->path());
+        $img->cover(540,689,'top');
+        $img->resize(540,689,function($constraint){
+            $constraint ->aspectRatio();
+        })->save($destination_path.'/'.$filename);
+    }
+
 }
