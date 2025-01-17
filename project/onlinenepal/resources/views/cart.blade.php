@@ -19,7 +19,7 @@
                 <em>Checkout Your Items List</em>
             </span>
             </a>
-            <a href=javascript:void(0)" class="checkout-steps__item">
+            <a href="javascript:void(0)" class="checkout-steps__item">
             <span class="checkout-steps__item-number">03</span>
             <span class="checkout-steps__item-title">
                 <span>Confirmation</span>
@@ -63,21 +63,33 @@
                     </td>
                     <td>
                     <div class="qty-control position-relative">
-                        <input type="number" name="quantity" value="3" min="1" class="qty-control__number text-center">
-                        <div class="qty-control__reduce">-</div>
-                        <div class="qty-control__increase">+</div>
+                        <input type="number" name="quantity" value="{{$item->qty}}" min="1" class="qty-control__number text-center">
+                        <form method="POST" action="{{route('cart.quantity.decrease',['rowId'=>$item->rowId])}}">
+                            @csrf
+                            @method('PUT')
+                            <div class="qty-control__reduce">-</div>
+                        </form>
+                        <form method="POST" action="{{route('cart.quantity.increase',['rowId'=>$item->rowId])}}">
+                            @csrf
+                            @method('PUT')
+                            <div class="qty-control__increase">+</div>
+                        </form>
                     </div>
                     </td>
                     <td>
                     <span class="shopping-cart__subtotal">Rs. {{$item->subTotal()}}</span>
                     </td>
                     <td>
-                    <a href="#" class="remove-cart">
+                    <form method="POST" action="{{route('cart.delete',['rowId'=>$item->rowId])}}">
+                            @csrf
+                            @method('DELETE')
+                    <a href="javascript:void(0)" class="remove-cart">
                         <svg width="10" height="10" viewBox="0 0 10 10" fill="#767676" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0.259435 8.85506L9.11449 0L10 0.885506L1.14494 9.74056L0.259435 8.85506Z" />
                         <path d="M0.885506 0.0889838L9.74057 8.94404L8.85506 9.82955L0 0.97449L0.885506 0.0889838Z" />
                         </svg>
                     </a>
+                    </form>
                     </td>
                 </tr>
                 @endforeach
@@ -89,7 +101,11 @@
                 <input class="btn-link fw-medium position-absolute top-0 end-0 h-100 px-4" type="submit"
                     value="APPLY COUPON">
                 </form>
-                <button class="btn btn-light">UPDATE CART</button>
+                <form method="POST" action="{{route('cart.clear')}}">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn btn-light" type="submit">Clear CART</button>
+                </form>
             </div>
             </div>
             <div class="shopping-cart__totals-wrapper">
@@ -138,3 +154,23 @@
         </section>
     </main>
 @endsection
+@push('website-script')
+<script>
+    $(function() {
+    // Handle quantity decrease
+    $('.qty-control__reduce').on('click', function() {
+        $(this).closest('form').submit();
+    });
+
+    // Handle quantity increase
+    $('.qty-control__increase').on('click', function() {
+        $(this).closest('form').submit();
+    });
+
+    // Handle quantity increase
+    $('.remove-cart').on('click', function() {
+        $(this).closest('form').submit();
+    });
+});
+</script>
+@endpush
