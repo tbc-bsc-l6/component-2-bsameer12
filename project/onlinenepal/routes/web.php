@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ControllerAdmin;
+use App\Http\Controllers\ControllerCart;
 use App\Http\Controllers\ControllerShop;
 use App\Http\Controllers\ControllerUser;
 use Illuminate\Support\Facades\Route;
@@ -12,9 +13,12 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/shop', [ControllerShop::class, 'index'])->name('shop.index');
+Route::get('/shop/{product_slug}', [ControllerShop::class, 'details_product'])->name('shop.product.details');
+Route::get('/cart}', [ControllerCart::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [ControllerCart::class, 'add_to_cart'])->name('cart.add');
 
 Route::middleware(['auth'])->group(function(){
-    Route::get('/account-dashboard',[ControllerUser::class, 'index'])->name('user.index');
+    Route::get('/account-dashboard',[ControllerUser::class, 'add_to_cart'])->name('user.index');
 });
 
 

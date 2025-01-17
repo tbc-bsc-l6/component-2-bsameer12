@@ -71,8 +71,8 @@
                                                     <td>{{$product->regular_price}}</td>
                                                     <td>{{$product->sales_price}}</td>
                                                     <td>{{$product->SKU}}</td>
-                                                    <td>{{ $product->category->name ?? 'No Category' }}</td>
-                                                    <td>{{ $product->brand->name ?? 'No Brand' }}</td>
+                                                    <td>{{$product->category->name ?? 'No Category' }}</td>
+                                                    <td>{{$product->brand->name ?? 'No Brand' }}</td>
                                                     <td>{{$product->featured}}</td>
                                                     <td>{{$product->stock_status}}</td>
                                                     <td>{{$product->quantity}}</td>
