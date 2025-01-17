@@ -18,13 +18,14 @@ return new class extends Migration
             $table->decimal('discount')->default(0);
             $table->decimal('tax');
             $table->decimal('total');
-            $table->string(' name');
+            $table->string('name');
             $table->string('phone');
             $table->string('locality');
             $table->text ('address');
             $table->string('city');
-            $table->string('state');
             $table->string('country');
+            $table->string('province');
+            $table->string('district');
             $table->string('landmark')->nullable();
             $table->string('zip');
             $table->string('type')->default ('home');

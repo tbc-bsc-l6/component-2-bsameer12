@@ -36,6 +36,11 @@ Route::middleware(['auth'])->group(function(){
 });
 
 
+Route::get('/checkout}', [ControllerCart::class, 'checkout'])->name('cart.checkout');
+Route::post('/place-order}', [ControllerCart::class, 'order_place'])->name('cart.checkout.place.order');
+Route::get('/confirmation-of-order}', [ControllerCart::class, 'confirmation_of_order'])->name('cart.confirmation.of.order');
+
+
 Route::middleware(['auth', AdminAuthentication::class])->group(function(){
     Route::get('/admin',[ControllerAdmin::class, 'index'])->name('admin.index');
     Route::get('/admin/brands',[ControllerAdmin::class, 'brands'])->name('admin.brands');

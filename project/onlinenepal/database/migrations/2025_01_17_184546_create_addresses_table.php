@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('province');
             $table->string('district');
+            $table->string('country');
             $table->string('landmark')->nullable();
             $table->string('zip');
             $table->string('type')->default('home');
