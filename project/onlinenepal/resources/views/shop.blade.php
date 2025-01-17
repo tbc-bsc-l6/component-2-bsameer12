@@ -383,12 +383,33 @@
                         <a href="#" class="swatch-color pc__swatch-color" style="color: #f5e6e0"></a>
                         </div>
 
+                        @if (Cart::instance('wishlist')->content()->where('id',$product->id)->count()>0)
+                            <form method="POST" action="{{route('wishlist.delete',['rowId'=>Cart::instance('wishlist')->content()->where('id',$product->id)->first()->rowId])}}">
+                                @csrf
+                                @method('DELETE')
+                                <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist filled-heart"
+                                title="Remove To Wishlist" style="color : red; background-color:red;" type="submit" >
+                                <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <use href="#icon_heart" />
+                                </svg>
+                                </button>
+                                </form>
+                        @else
+                        <form name="addtowishlist-form" method="POST" action="{{route('wishlist.add')}}">
+                        @csrf
                         <button class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                        title="Add To Wishlist">
+                        title="Add To Wishlist" type="submit">
                         <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <use href="#icon_heart" />
                         </svg>
                         </button>
+                        <input type="hidden" name="id" value="{{$product->id}}"/>
+                        <input type="hidden" name="name" value="{{$product->name}}"/>
+                        <input type="hidden" name="image" value="{{$product->image}}"/>
+                        <input type="hidden" name="quantity" value="1"/>
+                        <input type="hidden" name="price" value="{{$product->sales_price == "" ? $product->regular_price : $product->sales_price }}"/>
+                        </form>
+                        @endif
                     </div>
 
                     <div class="pc-labels position-absolute top-0 start-0 w-100 d-flex justify-content-between">

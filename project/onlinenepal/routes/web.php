@@ -4,6 +4,7 @@ use App\Http\Controllers\ControllerAdmin;
 use App\Http\Controllers\ControllerCart;
 use App\Http\Controllers\ControllerShop;
 use App\Http\Controllers\ControllerUser;
+use App\Http\Controllers\ControllerWishlist;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Middleware\AdminAuthentication;
@@ -14,6 +15,7 @@ Auth::routes();
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/shop', [ControllerShop::class, 'index'])->name('shop.index');
 Route::get('/shop/{product_slug}', [ControllerShop::class, 'details_product'])->name('shop.product.details');
+
 Route::get('/cart}', [ControllerCart::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [ControllerCart::class, 'add_to_cart'])->name('cart.add');
 Route::put('/cart/update-quantity-increase/{rowId}', [ControllerCart::class, 'cart_quantity_increase'])->name('cart.quantity.increase');
@@ -21,8 +23,14 @@ Route::put('/cart/update-quantity-decrease/{rowId}', [ControllerCart::class, 'ca
 Route::delete('/cart/delete/{rowId}', [ControllerCart::class, 'cart_item_remove'])->name('cart.delete');
 Route::delete('/cart/clear', [ControllerCart::class, 'cart_empty'])->name('cart.clear');
 
+Route::post('/wishlist/add', [ControllerWishlist::class, 'add_to_wishlist'])->name('wishlist.add');
+Route::get('/wishlist}', [ControllerWishlist::class, 'index'])->name('wishlist.index');
+Route::delete('/wishlist/delete/{rowId}', [ControllerWishlist::class, 'wishlist_item_remove'])->name('wishlist.delete');
+Route::delete('/wishlist/clear', [ControllerWishlist::class, 'wishlist_empty'])->name('wishlist.clear');
+Route::post('/wishlist/move-to-cart/{rowId}', [ControllerWishlist::class, 'wishlist_to_cart'])->name('wishlist.move.to.cart');
+
 Route::middleware(['auth'])->group(function(){
-    Route::get('/account-dashboard',[ControllerUser::class, 'add_to_cart'])->name('user.index');
+    Route::get('/account-dashboard',[ControllerUser::class, 'index'])->name('user.index');
 });
 
 
