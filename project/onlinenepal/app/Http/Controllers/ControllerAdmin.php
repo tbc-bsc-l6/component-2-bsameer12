@@ -12,6 +12,7 @@ use App\Models\Coupon;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
@@ -20,7 +21,31 @@ class ControllerAdmin extends Controller
 {
     public function index()
     {
-        return view('admin.index');
+        $orders = Order::orderBy('created_at','DESC')->get()->take(10);
+        $data_for_dashboard = DB::select("Select sum(total) As Total_Sales_Amount,
+                                            sum(discount) As Total_Discount_Amount,
+                                            sum(if(status='ordered',total,0)) As Total_Ordered_Amount,
+                                            sum(if(status='delivered',total,0)) As Total_delivered_Amount,
+                                            sum(if(status='canceled',total,0)) As Total_Canceled_Amount,
+                                            Count(*) As total,
+                                            sum(if(status='ordered',1,0)) As Total_Ordered,
+                                            sum(if(status='delivered',1,0)) As Total_delivered,
+                                            sum(if(status='canceled',1,0)) As Total_Canceled
+                                            From Orders
+                                            ");
+        $total_brand = Brand::count();
+        $total_categories = Category::count();
+        $total_products = Product::count();
+        $total_coupons = Coupon::count();
+        $total_quantity_sold = DB::table('order_items')->sum('quantity');
+        // Get the product with the minimum regular_price
+        $min_price_product = Product::orderBy('regular_price', 'ASC')->first();
+        $min_price_product_name = $min_price_product ? $min_price_product->name : 'No products available';
+
+        // Get the product with the maximum regular_price
+        $max_price_product = Product::orderBy('regular_price', 'DESC')->first();
+        $max_price_product_name = $max_price_product ? $max_price_product->name : 'No products available';
+        return view('admin.index',compact('orders','data_for_dashboard','total_brand','total_categories','total_products','min_price_product_name','max_price_product_name','total_coupons','total_quantity_sold'));
     }
 
     public function brands()
