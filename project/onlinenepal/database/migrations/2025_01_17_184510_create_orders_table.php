@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,7 +12,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger ('user_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
             $table->decimal('subtotal');
             $table->decimal('discount')->default(0);
             $table->decimal('tax');
@@ -21,18 +20,18 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone');
             $table->string('locality');
-            $table->text ('address');
+            $table->text('address');
             $table->string('city');
             $table->string('country');
             $table->string('province');
             $table->string('district');
             $table->string('landmark')->nullable();
             $table->string('zip');
-            $table->string('type')->default ('home');
+            $table->string('type')->default('home');
             $table->enum('status', ['ordered', 'delivered', ' canceled'])->default('ordered');
-            $table->boolean ('is_shipping_different')->default(false);
-            $table->date( 'delivered _date')->nullable(); 
-            $table->date('canceled _date')->nullable();
+            $table->boolean('is_shipping_different')->default(false);
+            $table->date('delivered_date')->nullable();
+            $table->date('canceled_date')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

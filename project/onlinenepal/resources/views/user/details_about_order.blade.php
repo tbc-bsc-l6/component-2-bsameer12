@@ -112,7 +112,7 @@
                                 <h5>Ordered Details</h5>
                             </div>
                             <div class="col-6 text-right">
-                                <a class="btn btn-sm btn-danger" href="{{route('user.orders')}}">Back</a>
+                                <a class="btn btn-sm btn-danger" href="{{ route('user.orders') }}">Back</a>
                             </div>
                         </div>
                         <div class="table-responsive">
