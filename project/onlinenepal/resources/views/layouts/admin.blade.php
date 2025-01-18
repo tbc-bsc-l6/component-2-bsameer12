@@ -24,12 +24,12 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
     </head>
 
-    <body class="body" style="background-color: grey; color: white;">
+    <body class="body">
         <div id="wrapper">
             <div id="page" class="">
                 <div class="layout-wrap">
-                    <div class="section-menu-left" style="background-color: grey; color: white;">
-                        <div class="box-logo" style="background-color: grey; color: white;">
+                    <div class="section-menu-left">
+                        <div class="box-logo" style="margin-bottom:150px;">
                             <a href="{{ route('admin.index') }}" id="site-logo-inner">
                                 <img class="" id="logo_header_1" alt=""
                                     src="{{ asset('images/logo/logo.png') }}"
@@ -42,7 +42,7 @@
                         </div>
                         <div class="center">
                             <div class="center-item">
-                                <div class="center-heading">Main Home</div>
+                                <div class="center-heading" style="margin-top:80px;">Main Home</div>
                                 <ul class="menu-list">
                                     <li class="menu-item">
                                         <a href="{{ route('admin.index') }}" class="">
@@ -163,9 +163,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="section-content-right" >
+                    <div class="section-content-right">
 
-                        <div class="header-dashboard" style="background-color: grey; color: white;">
+                        <div class="header-dashboard">
                             <div class="wrap">
                                 <div class="header-left">
                                     <a href="index-2.html">
@@ -182,11 +182,15 @@
                                         <fieldset class="name">
                                             <input type="text" placeholder="Search here..." class="show-search"
                                                 name="name" tabindex="2" value="" aria-required="true"
-                                                required="">
+                                                required="" id="search-input">
                                         </fieldset>
                                         <div class="button-submit">
                                             <button class="" type="submit"><i
                                                     class="icon-search"></i></button>
+                                        </div>
+                                        <div class="box-content-search">
+                                            <ul id="box-content-search">
+                                            </ul>
                                         </div>
                                     </form>
 
@@ -194,27 +198,30 @@
                                 <div class="header-grid">
                                     <div class="popup-wrap user type-header">
                                         <div class="dropdown">
-                                                <span class="header-user wg-user">
-                                                    <span class="image">
-                                                        <img src="images/avatar/user-1.png" alt="">
-                                                    </span>
-                                                    <span class="flex flex-column">
-                                                        <span class="body-title mb-2">{{ auth()->user()->name }}</span>
-                                                        <span class="text-tiny" style="color: black;">{{ auth()->user()->usertype }}</span>
-                                                    </span>
+                                            <span class="header-user wg-user">
+                                                <span class="image">
+                                                    <img src="images/avatar/user-1.png" alt="">
                                                 </span>
+                                                <span class="flex flex-column">
+                                                    <span class="body-title mb-2">{{ auth()->user()->name }}</span>
+                                                    <span class="text-tiny"
+                                                        style="color: black;">{{ auth()->user()->usertype }}</span>
+                                                </span>
+                                            </span>
                                         </div>
                                     </div>
 
                                 </div>
                             </div>
                         </div>
-                        <div class="main-content" style="background-color: grey; color: white;">
+                        <div class="main-content">
                             @yield('website-content')
                         </div>
 
-                        <div class="bottom-page" style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: grey; color: white; text-align: center; padding: 10px 0; z-index: 1000;">
-                            <div class="body-text" style="margin: 0; font-size: 14px; color: white;">Copyright © 2025 OnlineNepal</div>
+                        <div class="bottom-page"
+                            style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: grey; color: white; text-align: center; padding: 10px 0; z-index: 1000;">
+                            <div class="body-text" style="margin: 0; font-size: 14px; color: white;">Copyright © 2025
+                                OnlineNepal</div>
                         </div>
                     </div>
 
@@ -337,6 +344,52 @@
 
                 jQuery(window).on("resize", function() {});
             })(jQuery);
+            $(function() {
+                $("#search-input").on("keyup", function() {
+                    var searchQuery = $(this).val();
+                    if (searchQuery.length > 2) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ route('admin.search') }}",
+                            data: {
+                                query: searchQuery
+                            },
+                            dataType: 'json',
+                            success: function(data) {
+                                $("#box-content-search").html(''); // Clear previous results
+                                $.each(data, function(index, item) {
+                                    var url =
+                                        "{{ route('admin.products.modify', ['id' => 'product_id']) }}";
+                                    var link = url.replace('product_id', item.id);
+
+                                    // Append each product result to the box content
+                                    $("#box-content-search").append(`
+                                    <li style="list-style: none; margin-bottom: 10px;">
+                                        <div onclick="window.location.href='${link}'" 
+                                            style="display: flex; align-items: center; justify-content: space-between; 
+                                                    border: 1px solid #ddd; border-radius: 5px; padding: 10px; 
+                                                    background-color: #f9f9f9; cursor: pointer; transition: background-color 0.3s;">
+                                            
+                                            <div style="flex-shrink: 0; margin-right: 10px;">
+                                                <img src="{{ asset('uploads/products') }}/${item.image}" alt="${item.name}" 
+                                                    style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;">
+                                            </div>
+                                            
+                                            <div style="flex-grow: 1;">
+                                                <span style="font-size: 14px; color: #333;">${item.name}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                `);
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("Error fetching search results:", error);
+                            }
+                        });
+                    }
+                });
+            });
         </script>
         @stack('website-script')
     </body>

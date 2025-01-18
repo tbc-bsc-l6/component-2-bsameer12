@@ -635,4 +635,23 @@ class ControllerAdmin extends Controller
         ;
     }
 
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        if (!$query) {
+            return response()->json(['error' => 'Query parameter is required'], 400);
+        }
+
+        $results = Product::where('name', 'LIKE', "%{$query}%")
+            ->select('id', 'name', 'slug', 'image')
+            ->take(8)
+            ->get();
+
+        if ($results->isEmpty()) {
+            return response()->json(['message' => 'No products found'], 404);
+        }
+
+        return response()->json($results);
+    }
+
 }
