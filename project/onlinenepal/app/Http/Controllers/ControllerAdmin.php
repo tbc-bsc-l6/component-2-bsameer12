@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Slide;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Transaction;
@@ -509,6 +510,104 @@ class ControllerAdmin extends Controller
             $transaction->save();
         }
         return back()->with('status', 'Order status for order id ' . $request->order_id . " has been updated successfully!");
+    }
+
+    public function slide()
+    {
+        $slides = Slide::orderBy('id', 'Desc')->paginate(12);
+        return view('admin.slides', compact('slides'));
+    }
+
+    public function slider_create()
+    {
+        return view('admin.slide_create');
+    }
+
+    public function save_slider(Request $request)
+    {
+        $request->validate([
+            'tagline' => 'required',
+            'title' => 'required',
+            'subtitle' => 'required',
+            'image' => 'required|mimes:png,jpeg,jpg|max:2048',
+            'link' => 'required',
+            'status' => 'required',
+        ]);
+        $slide = new Slide();
+        $slide->title = $request->title;
+        $slide->tagline = $request->tagline;
+        $slide->subtitle = $request->subtitle;
+        $slide->image = $request->image;
+        $slide->link = $request->link;
+        $slide->status = $request->status;
+        $image = $request->file('image');
+        $file_extension = $request->file('image')->extension();
+        $file_name = Carbon::now()->timestamp . '.' . $file_extension;
+        $this->SaveSlideImage($image, $file_name);
+        $slide->image = $file_name;
+        $slide->save();
+        return redirect()->route('admin.slides')->with('status', 'Slide ' . $request->title . " has been added successfully!");
+    }
+
+
+    public function SaveSlideImage($image, $filename)
+    {
+        $destination_path = public_path("uploads/slides");
+        $img = Image::read($image->path());
+        $img->cover(400, 690, 'top');
+        $img->resize(400, 690, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destination_path . '/' . $filename);
+    }
+
+    public function modify_slider($id)
+    {
+
+        $slide = Slide::find($id);
+        return view('admin.slide_modify', compact('slide'));
+    }
+
+    public function update_slider(Request $request)
+    {
+        $request->validate([
+            'tagline' => 'required',
+            'title' => 'required',
+            'subtitle' => 'required',
+            'image' => 'required|mimes:png,jpeg,jpg|max:2048',
+            'link' => 'required',
+            'status' => 'required',
+        ]);
+        $slide = Slide::find($request->id);
+        $slide->title = $request->title;
+        $slide->tagline = $request->tagline;
+        $slide->subtitle = $request->subtitle;
+        $slide->image = $request->image;
+        $slide->link = $request->link;
+        $slide->status = $request->status;
+        if ($request->hasFile('image')) {
+            if (File::exists(public_path('uploads/slides') . '/' . $slide->image)) {
+                File::delete(public_path('uploads/slides') . '/' . $slide->image);
+            }
+            $image = $request->file('image');
+            $file_extension = $request->file('image')->extension();
+            $file_name = Carbon::now()->timestamp . '.' . $file_extension;
+            $this->SaveSlideImage($image, $file_name);
+            $slide->image = $file_name;
+        }
+        $slide->save();
+        return redirect()->route('admin.slides')->with('status', 'Slide ' . $request->title . " has been updated successfully!");
+    }
+
+    public function remove_slide($id)
+    {
+        $slide = Slide::find($id);
+        if (File::exists(public_path('uploads/slides') . '/' . $slide->image)) {
+            File::delete(public_path('uploads/cslides') . '/' . $slide->image);
+        }
+        $slide_title = $slide->title;
+        $slide->delete();
+        return redirect()->route('admin.slides')->with('status', 'Slide ' . $slide_title . " has been deleted successfully!");
+        ;
     }
 
 }

@@ -81,4 +81,11 @@ Route::middleware(['auth', AdminAuthentication::class])->group(function () {
     Route::get('/admin/orders/details/{order_id}', [ControllerAdmin::class, 'details_about_orders'])->name('admin.order.details');
     Route::put('/admin/orders/status-update', [ControllerAdmin::class, 'order_status_update'])->name('admin.order.status.update');
 
+    Route::get('/admin/slides', [ControllerAdmin::class, 'slide'])->name('admin.slides');
+    Route::get('/admin/slides/create', [ControllerAdmin::class, 'slider_create'])->name('admin.slides.create');
+    Route::post('/admin/slides/save', [ControllerAdmin::class, 'save_slider'])->name('admin.slides.save');
+    Route::get('/admin/slides/modify/{id}', [ControllerAdmin::class, 'modify_slider'])->name('admin.slides.modify');
+    Route::put('/admin/slides/update', [ControllerAdmin::class, 'update_slider'])->name('admin.slides.update');
+    Route::delete('/admin/slides/remove/{id}', [ControllerAdmin::class, 'remove_slide'])->name('admin.slide.remove');
+
 });
