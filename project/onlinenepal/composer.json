@@ -12,6 +12,8 @@
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.6",
+        "paypal/paypal-checkout-sdk": "^1.0",
+        "paypal/rest-api-sdk-php": "^1.6",
         "surfsidemedia/shoppingcart": "^1.0"
     },
     "require-dev": {

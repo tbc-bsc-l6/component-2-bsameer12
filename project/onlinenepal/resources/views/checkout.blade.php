@@ -27,8 +27,10 @@
             </span>
             </a>
         </div>
-        <form name="checkout-form" action="{{route('cart.checkout.place.order')}}" method='POST'>
+        <form name="checkout-form" id="checkout-form" action="{{route('cart.checkout.place.order')}}" method='POST'>
             @csrf
+            <input type="hidden" name="payment_id" id="payment_id">
+            <input type="hidden" name="payer_id" id="payer_id">
             <div class="checkout-form">
             <div class="billing-info__wrapper">
                 <div class="row">
@@ -231,3 +233,26 @@
         </section>
     </main>
 @endsection
+@push('website-script')
+<script>
+document.querySelector('.btn-checkout').addEventListener('click', function (e) {
+    const selectedMode = document.querySelector('input[name="mode"]:checked');
+    const form = document.querySelector('#checkout-form');
+
+    if (!selectedMode) {
+        e.preventDefault();
+        alert("Please select a payment method.");
+        return;
+    }
+
+    if (selectedMode.value === 'paypal') {
+        e.preventDefault(); // Prevent form submission
+        form.action = "{{ route('cart.checkout.paypal') }}"; // Set PayPal-specific route
+        form.submit(); // Submit the form for PayPal processing
+    } else {
+        form.action = "{{ route('cart.checkout.place.order') }}"; // Default route for COD
+    }
+});
+
+</script>
+@endpush

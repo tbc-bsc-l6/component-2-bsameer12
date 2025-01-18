@@ -23,4 +23,21 @@ class Order extends Model
     {
         return $this->hasOne(Transaction::class);
     }
+
+    // Allow mass assignment for these fields
+    protected $fillable = [
+        'user_id', 
+        'subtotal',
+        'discount',
+        'tax',
+        'total',
+        'locality',
+        'name',
+        'phone',
+        'address',
+        'city',
+        'province',
+        'district',
+        'zip'
+    ];
 }

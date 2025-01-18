@@ -18,4 +18,13 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    // Allow mass assignment for these fields
+    protected $fillable = [
+        'order_id',
+        'product_id',
+        'quantity',
+        'price',
+        'subtotal',
+    ];
 }

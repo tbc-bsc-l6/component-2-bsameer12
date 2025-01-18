@@ -31,6 +31,14 @@ Route::delete('/wishlist/delete/{rowId}', [ControllerWishlist::class, 'wishlist_
 Route::delete('/wishlist/clear', [ControllerWishlist::class, 'wishlist_empty'])->name('wishlist.clear');
 Route::post('/wishlist/move-to-cart/{rowId}', [ControllerWishlist::class, 'wishlist_to_cart'])->name('wishlist.move.to.cart');
 
+//Route::get('/checkout/paypal', [ControllerCart::class, 'handlePayPal'])->name('cart.checkout.paypal');
+Route::match(['get', 'post'], '/checkout/paypal', [ControllerCart::class, 'handlePayPal'])->name('cart.checkout.paypal');
+
+Route::get('/checkout/paypal-success', [ControllerCart::class, 'paypalSuccess'])->name('paypal.success');
+Route::get('/checkout/paypal-cancel', [ControllerCart::class, 'paypalCancel'])->name('paypal.cancel');
+
+
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/account-dashboard', [ControllerUser::class, 'index'])->name('user.index');
 
