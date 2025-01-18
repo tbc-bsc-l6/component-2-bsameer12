@@ -16,6 +16,8 @@ use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\SandboxEnvironment; // Switch to LiveEnvironment for production
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
+use App\Mail\OrderConfirmationMail;
+use Illuminate\Support\Facades\Mail;
 
 
 class ControllerCart extends Controller
@@ -204,12 +206,16 @@ class ControllerCart extends Controller
         $transaction->mode = $request->mode;
         $transaction->status = $request->has('payment_id') ? 'approved' : 'pending';
         $transaction->save();
-
         Cart::instance('cart')->destroy();
         Session::forget('checkout');
         Session::forget('coupon');
         Session::forget('discounts');
         Session::put('order_id', $order->id);
+        $order_id = Session::get('order_id');
+        $order = Order::find($order_id);
+        // Send the order confirmation email
+        Mail::to($order->user->email)->send(new OrderConfirmationMail($order_id));
+
 
         return redirect()->route('cart.confirmation.of.order');
     }

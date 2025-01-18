@@ -1,64 +1,44 @@
 @extends('layouts.app')
 @section('website-content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('password.update') }}">
-                        @csrf
-
-                        <input type="hidden" name="token" value="{{ $token }}">
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Reset Password') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+<div style="max-width: 400px; margin: 50px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); text-align: center;">
+    <!-- OTP Animation -->
+    <div style="width: 100px; height: 100px; margin: 0 auto 20px auto; background-image: url('https://cdn-icons-png.flaticon.com/512/3583/3583124.png'); background-size: contain; background-repeat: no-repeat; animation: rotate-pulse 1.5s infinite;">
+        <style>
+            @keyframes rotate-pulse {
+                0%, 100% {
+                    transform: scale(1) rotate(0deg);
+                }
+                50% {
+                    transform: scale(1.1) rotate(10deg);
+                }
+            }
+        </style>
     </div>
+    <!-- Success Message -->
+    @if(session('success'))
+        <div style="color: green; text-align: center; margin-bottom: 15px;">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <!-- Error Message -->
+    @error('email')
+        <div style="color: red; text-align: center; margin-bottom: 15px;">
+            {{ $message }}
+        </div>
+    @enderror
+    <h2 style="color: #333;">Verify OTP</h2>
+    <form action="/forgot-password/verify-otp" method="POST" style="margin-top: 20px;">
+        @csrf
+        <label for="otp" style="display: block; font-weight: bold; margin-bottom: 8px; color: #555;">OTP</label>
+        <input type="text" id="otp" name="otp" required placeholder="Enter the OTP" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">
+        
+        <label for="email" style="display: block; font-weight: bold; margin-bottom: 8px; color: #555;">Email</label>
+        <input type="email" id="email" name="email" required placeholder="Enter your email" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">
+
+        <button type="submit" style="width: 100%; padding: 10px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; transition: background 0.3s ease;">Verify OTP</button>
+    </form>
+    <p style="text-align: center; font-size: 14px; color: #666; margin-top: 10px;">Enter the OTP sent to your email or phone.</p>
 </div>
 @endsection
+

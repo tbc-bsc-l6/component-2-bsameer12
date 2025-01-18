@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Middleware\AdminAuthentication;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 
 Auth::routes();
 
@@ -53,6 +54,11 @@ Route::post('/place-order}', [ControllerCart::class, 'order_place'])->name('cart
 Route::get('/confirmation-of-order}', [ControllerCart::class, 'confirmation_of_order'])->name('cart.confirmation.of.order');
 
 Route::get('/search',[HomeController::class,'product_search'])->name('home.search');
+
+Route::post('/forgot-password/send-otp', [ForgotPasswordController::class, 'sendOtp'])->name('password.email');
+Route::get('/forgot-password/email', [ForgotPasswordController::class, 'reset_email'])->name('forgot-password.email');
+Route::post('/forgot-password/verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('password.verifyOtp');
+Route::put('/forgot-password/reset', [ForgotPasswordController::class, 'resetPassword'])->name('password.reset');
 
 Route::middleware(['auth', AdminAuthentication::class])->group(function () {
     Route::get('/admin', [ControllerAdmin::class, 'index'])->name('admin.index');
@@ -100,3 +106,6 @@ Route::middleware(['auth', AdminAuthentication::class])->group(function () {
     Route::get('/admin/search', [ControllerAdmin::class, 'search'])->name('admin.search');
 
 });
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
