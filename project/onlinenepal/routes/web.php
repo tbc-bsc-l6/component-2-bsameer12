@@ -33,6 +33,9 @@ Route::post('/wishlist/move-to-cart/{rowId}', [ControllerWishlist::class, 'wishl
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/account-dashboard',[ControllerUser::class, 'index'])->name('user.index');
+
+    Route::get('/account-orders',[ControllerUser::class, 'orders'])->name('user.orders');
+    Route::get('/account/orders/details/{order_id}',[ControllerUser::class, 'details_about_orders'])->name('user.order.details');
 });
 
 

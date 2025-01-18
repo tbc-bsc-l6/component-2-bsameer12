@@ -49,9 +49,9 @@
                             <th>Canceled Date: </th>
                             <td>{{$order->canceled_date}}</td>
                         </tr>
-                        <tr colspan="5">
+                        <tr>
                             <th>Order Status: </th>
-                            <td>
+                            <td colspan="5">
                                 @if($order->status == 'delivered')
                                     <span class="badge bg-success">Delivered</span>
                                 @elseif($order->status == 'canceled')
