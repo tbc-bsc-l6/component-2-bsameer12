@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Transaction;
 use App\Models\Category;
 use App\Models\Coupon;
 use App\Models\Product;
@@ -476,6 +479,20 @@ class ControllerAdmin extends Controller
         $coupon_code = $coupon->code;
         $coupon->delete();
         return redirect()->route('admin.coupons')->with('status', 'Coupon ' . $coupon_code . " has been deleted successfully!");
+    }
+
+    public function orders()
+    {
+        $orders = Order::orderBy('created_at','DESC')->paginate(12);
+        return view('admin.orders',compact('orders'));
+    }
+
+    public function details_about_orders($order_id)
+    {
+        $order = Order::find($order_id);
+        $orderItems = OrderItem::where('order_id',$order_id)->orderBy('id','DESC')->paginate(12);
+        $transaction = Transaction::where('order_id',$order_id)->first();
+        return view('admin.details_about_order',compact('order','orderItems','transaction'));
     }
 
 }
