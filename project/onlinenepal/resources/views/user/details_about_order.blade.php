@@ -116,6 +116,9 @@
                             </div>
                         </div>
                         <div class="table-responsive">
+                            @if (Session::has('status'))
+                                <p class="alert alert-success">{{ Session::get('status') }}</p>
+                            @endif
                             <table class="table  table-bordered">
                                 <tr>
                                     <th>Order No: </th>
@@ -245,17 +248,65 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="wg-box mt-5 text-right">
-                        <form action="http://localhost:8000/account-order/cancel-order" method="POST">
-                            <input type="hidden" name="_token" value="3v611ELheIo6fqsgspMOk0eiSZjncEeubOwUa6YT"
-                                autocomplete="off">
-                            <input type="hidden" name="_method" value="PUT"> <input type="hidden" name="order_id"
-                                value="1">
-                            <button type="submit" class="btn btn-danger">Cancel Order</button>
-                        </form>
-                    </div>
+                    @if ($order->status != 'canceled')
+                        <div class="wg-box mt-5">
+                            <h5>Order Status Update</h5>
+                            <form name="updateOrderStatus-form" id="updateOrderStatus-form" method="POST"
+                                action="{{ route('user.order.cancel') }}">
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" name="order_id" value="{{ $order->id }}" />
+                                <input type="hidden" name="order_status" value="canceled" />
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <button type="submit" class="btn btn-primary tf-button w208 " id="cancel-order"
+                                            style="margin-top: 25px; background-color: red; color: white;">Cancel
+                                            Order</button>
+                                    </div>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             </div>
         </section>
     </main>
 @endsection
+@push('website-script')
+    <script>
+        $(function() {
+    // Attach click event to cancel button
+    $('#cancel-order').on('click', function(e) {
+        e.preventDefault(); // Prevent the default button action
+
+        var formId = 'updateOrderStatus-form'; // Replace 'your-form-id' with the actual ID of the form
+        var form = $('#' + formId); // Select the form by ID
+
+        // Display SweetAlert confirmation dialog
+        swal({
+            title: "Are you sure?",
+            text: "Once canceled, this action cannot be undone!",
+            icon: "warning",
+            buttons: {
+                cancel: {
+                    text: "No",
+                    visible: true,
+                    closeModal: true
+                },
+                confirm: {
+                    text: "Yes, Cancel Order",
+                    value: true,
+                    visible: true,
+                    className: "btn-danger", // Styling the confirm button
+                }
+            },
+            dangerMode: true
+        }).then(function(result) {
+            if (result) {
+                form.submit(); // Submit the form if confirmed
+            }
+        });
+    });
+});
+
+    </script>
+@endpush

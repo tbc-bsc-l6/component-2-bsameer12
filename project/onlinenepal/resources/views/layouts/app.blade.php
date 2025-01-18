@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="{{asset('assets/css/plugins/swiper.min.css')}}" type="text/css" />
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}" type="text/css" />
     <link rel="stylesheet" href="{{asset('assets/css/custom.css')}}" type="text/css" />
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -671,6 +672,7 @@
     <script src="{{asset('assets/js/plugins/swiper.min.js')}}"></script>
     <script src="{{asset('assets/js/plugins/countdown.js')}}"></script>
     <script src="{{asset('assets/js/theme.js')}}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @stack("website-script")
     </body>
 </html>
