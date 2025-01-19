@@ -43,6 +43,13 @@
                             @enderror
                         </div>
 
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="remember" name="remember" style="cursor: pointer;">
+                            <label class="form-check-label" for="remember" style="cursor: pointer; color: #6c757d;">
+                                Remember Me
+                            </label>
+                        </div>
+
                         <button type="submit" style="display: block; width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s ease; animation: buttonFadeIn 1.5s ease;">
                             Log In
                         </button>
@@ -138,6 +145,25 @@
     }
 </style>
 @endsection
+@push('website-script')
+@if (isset($_COOKIE['email']) && isset($_COOKIE['password']))
+    <script>
+        document.querySelector('[name="email"]').value = "{{ $_COOKIE['email'] }}";
+        document.querySelector('[name="password"]').value = "{{ $_COOKIE['password'] }}";
+        document.querySelector('#remember').checked = true;
+    </script>
+@endif
 
-
-
+<script>
+    document.querySelector('form').addEventListener('submit', function (event) {
+        const rememberMe = document.querySelector('#remember').checked;
+        if (rememberMe) {
+            document.cookie = `email=${document.querySelector('[name="email"]').value}; max-age=${15 * 24 * 60 * 60}; path=/;`;
+            document.cookie = `password=${document.querySelector('[name="password"]').value}; max-age=${15 * 24 * 60 * 60}; path=/;`;
+        } else {
+            document.cookie = 'email=; max-age=0; path=/;';
+            document.cookie = 'password=; max-age=0; path=/;';
+        }
+    });
+</script>
+@endpush

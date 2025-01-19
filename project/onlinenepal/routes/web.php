@@ -48,6 +48,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/account-orders', [ControllerUser::class, 'orders'])->name('user.orders');
     Route::get('/account/orders/details/{order_id}', [ControllerUser::class, 'details_about_orders'])->name('user.order.details');
     Route::put('/account/orders/cancel', [ControllerUser::class, 'order_status_update'])->name('user.order.cancel');
+    Route::get('/account-details', [ControllerUser::class, 'dashboard'])->name('user.dashboard');
+    Route::put('/update-details', [ControllerUser::class, 'updateDetails'])->name('user.updateDetails');
+    Route::put('/update-password', [ControllerUser::class, 'updatePassword'])->name('user.updatePassword');
+    Route::get('/user-address-details', [ControllerUser::class, 'user_address'])->name('user.address-details');
+    Route::get('/user-address-create', [ControllerUser::class, 'create_address'])->name('user.address-create');
+    Route::post('/user/address/create', [ControllerUser::class, 'storeAddress'])->name('user.address.store');
+    Route::get('/user-address-modify', [ControllerUser::class, 'modify_address'])->name('user.address-modify');
+    Route::put('/user/address/update/{id}', [ControllerUser::class, 'update_address'])->name('user.address.update');
+
+
 });
 
 
