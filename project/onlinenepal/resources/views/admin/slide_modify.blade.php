@@ -33,7 +33,7 @@
                     enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name='id' id='id' value="{{$slide->id}}"/>
+                    <input type="hidden" name='id' id='id' value="{{ $slide->id }}" />
                     <fieldset class="name">
                         <div class="body-title">Tagline <span class="tf-color-1">*</span></div>
                         <input class="flex-grow" type="text" placeholder="Tagline" name="tagline" tabindex="0"
@@ -45,7 +45,7 @@
                     <fieldset class="name">
                         <div class="body-title">Title <span class="tf-color-1">*</span></div>
                         <input class="flex-grow" type="text" placeholder="Title" name="title" tabindex="0"
-                            value="{{  $slide->title }}" aria-required="true" required="">
+                            value="{{ $slide->title }}" aria-required="true" required="">
                     </fieldset>
                     @error('title')
                         <span class="alert alert-danger text-center">{{ $message }}</span>
@@ -53,7 +53,7 @@
                     <fieldset class="name">
                         <div class="body-title">Subtitle <span class="tf-color-1">*</span></div>
                         <input class="flex-grow" type="text" placeholder="Subtitle" name="subtitle" tabindex="0"
-                            value="{{  $slide->subtitle }}" aria-required="true" required="">
+                            value="{{ $slide->subtitle }}" aria-required="true" required="">
                     </fieldset>
                     @error('subtitle')
                         <span class="alert alert-danger text-center">{{ $message }}</span>
@@ -61,7 +61,7 @@
                     <fieldset class="name">
                         <div class="body-title">Link <span class="tf-color-1">*</span></div>
                         <input class="flex-grow" type="text" placeholder="Link" name="link" tabindex="0"
-                            value="{{  $slide->link }}" aria-required="true" required="">
+                            value="{{ $slide->link }}" aria-required="true" required="">
                     </fieldset>
                     @error('link')
                         <span class="alert alert-danger text-center">{{ $message }}</span>
@@ -71,7 +71,8 @@
                         </div>
                         <div class="upload-image flex-grow">
                             <div class="item" id="imgpreview">
-                                <img src="{{asset('uploads/slides')}}/{{$slide->image}}" class="effect8" alt="Preview">
+                                <img src="{{ asset('uploads/slides') }}/{{ $slide->image }}" class="effect8"
+                                    alt="Preview">
                             </div>
                             <div class="item up-load">
                                 <label class="uploadfile" for="myFile">
@@ -93,8 +94,8 @@
                         <div class="select flex-grow">
                             <select class="" name="status">
                                 <option>Status</option>
-                                <option value="1" @if ( $slide->status == '1') selected @endif>Active</option>
-                                <option value="2" @if ( $slide->status == '2') selected @endif>Inactive</option>
+                                <option value="1" @if ($slide->status == '1') selected @endif>Active</option>
+                                <option value="2" @if ($slide->status == '2') selected @endif>Inactive</option>
                             </select>
                         </div>
                     </fieldset>

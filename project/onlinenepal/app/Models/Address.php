@@ -9,8 +9,18 @@ class Address extends Model
     protected $table = 'addresses'; // Specify table name if it doesn't follow convention
 
     protected $fillable = [
-        'user_id', 'name', 'phone', 'zip', 'province', 'city', 'address',
-        'locality', 'landmark', 'district', 'is_default', 'country',
+        'user_id',
+        'name',
+        'phone',
+        'zip',
+        'province',
+        'city',
+        'address',
+        'locality',
+        'landmark',
+        'district',
+        'is_default',
+        'country',
     ];
 
     protected $attributes = [

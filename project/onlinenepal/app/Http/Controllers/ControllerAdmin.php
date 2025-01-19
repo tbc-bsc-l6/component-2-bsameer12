@@ -82,9 +82,6 @@ class ControllerAdmin extends Controller
         $brand->image = $file_name;
         $brand->save();
         return redirect()->route('admin.brands')->with('status', 'Brand ' . $request->name . " has been added successfully!");
-
-
-
     }
 
     public function SaveBrandImage($image, $filename)
@@ -138,8 +135,7 @@ class ControllerAdmin extends Controller
         }
         $brand_name = $brand->name;
         $brand->delete();
-        return redirect()->route('admin.brands')->with('status', 'Brand ' . $brand_name . " has been deleted successfully!");
-        ;
+        return redirect()->route('admin.brands')->with('status', 'Brand ' . $brand_name . " has been deleted successfully!");;
     }
 
     public function category()
@@ -173,9 +169,6 @@ class ControllerAdmin extends Controller
         $cat->image = $file_name;
         $cat->save();
         return redirect()->route('admin.category')->with('status', 'Category ' . $request->name . " has been added successfully!");
-
-
-
     }
 
     public function SaveCategoryImage($image, $filename)
@@ -230,8 +223,7 @@ class ControllerAdmin extends Controller
         }
         $cat_name = $cat->name;
         $cat->delete();
-        return redirect()->route('admin.category')->with('status', 'Category ' . $cat_name . " has been deleted successfully!");
-        ;
+        return redirect()->route('admin.category')->with('status', 'Category ' . $cat_name . " has been deleted successfully!");;
     }
 
     public function products()
@@ -245,7 +237,6 @@ class ControllerAdmin extends Controller
         $categories = Category::select('id', 'name')->orderBy('name')->get();
         $brands = Brand::select('id', 'name')->orderBy('name')->get();
         return redirect()->route('admin.product.create', compact('categories', 'brands'));
-
     }
 
 
@@ -303,18 +294,13 @@ class ControllerAdmin extends Controller
                     $this->SaveProductsImage($file, $file_name);
                     array_push($gallery_array, $file_name);
                     $counter++;
-
                 }
-
             }
             $gallery_images = implode(',', $gallery_array);
         }
         $product->images = $gallery_images;
         $product->save();
         return redirect()->route('admin.products')->with('status', 'Product ' . $request->name . " has been added successfully!");
-
-
-
     }
 
     public function SaveProductsImage($image, $filename)
@@ -634,8 +620,7 @@ class ControllerAdmin extends Controller
         }
         $slide_title = $slide->title;
         $slide->delete();
-        return redirect()->route('admin.slides')->with('status', 'Slide ' . $slide_title . " has been deleted successfully!");
-        ;
+        return redirect()->route('admin.slides')->with('status', 'Slide ' . $slide_title . " has been deleted successfully!");;
     }
 
     public function search(Request $request)
@@ -743,8 +728,6 @@ class ControllerAdmin extends Controller
         $user = User::find($id);
         $user_name = $user->name;
         $user->delete();
-        return redirect()->route('admin.users')->with('status', 'User ' . $user_name . " has been deleted successfully!");
-        ;
+        return redirect()->route('admin.users')->with('status', 'User ' . $user_name . " has been deleted successfully!");;
     }
-
 }

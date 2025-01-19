@@ -136,14 +136,14 @@
                                     </li>
 
                                     <li class="menu-item">
-                                        <a href="{{route('admin.users')}}" class="">
+                                        <a href="{{ route('admin.users') }}" class="">
                                             <div class="icon"><i class="icon-user"></i></div>
                                             <div class="text">User</div>
                                         </a>
                                     </li>
 
                                     <li class="menu-item">
-                                        <a href="{{route('admin.settings')}}" class="">
+                                        <a href="{{ route('admin.settings') }}" class="">
                                             <div class="icon"><i class="icon-settings"></i></div>
                                             <div class="text">Settings</div>
                                         </a>

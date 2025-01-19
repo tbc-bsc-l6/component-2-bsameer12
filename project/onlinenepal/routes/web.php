@@ -56,8 +56,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/user/address/create', [ControllerUser::class, 'storeAddress'])->name('user.address.store');
     Route::get('/user-address-modify', [ControllerUser::class, 'modify_address'])->name('user.address-modify');
     Route::put('/user/address/update/{id}', [ControllerUser::class, 'update_address'])->name('user.address.update');
-
-
 });
 
 
@@ -65,7 +63,7 @@ Route::get('/checkout}', [ControllerCart::class, 'checkout'])->name('cart.checko
 Route::post('/place-order}', [ControllerCart::class, 'order_place'])->name('cart.checkout.place.order');
 Route::get('/confirmation-of-order}', [ControllerCart::class, 'confirmation_of_order'])->name('cart.confirmation.of.order');
 
-Route::get('/search',[HomeController::class,'product_search'])->name('home.search');
+Route::get('/search', [HomeController::class, 'product_search'])->name('home.search');
 
 Route::post('/forgot-password/send-otp', [ForgotPasswordController::class, 'sendOtp'])->name('password.email');
 Route::get('/forgot-password/email', [ForgotPasswordController::class, 'reset_email'])->name('forgot-password.email');
@@ -129,8 +127,6 @@ Route::middleware(['auth', AdminAuthentication::class])->group(function () {
 
     Route::get('/admin/users', [ControllerAdmin::class, 'usersWithOrderCount'])->name('admin.users');
     Route::delete('/admin/user/remove/{id}', [ControllerAdmin::class, 'remove_user'])->name('admin.user.remove');
-
-
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

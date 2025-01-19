@@ -191,54 +191,53 @@ class ControllerUser extends Controller
         $user = Auth::user();
         // Query the address using the user_id column
         $address = Address::where('user_id', $user->id)->first();
-        return view('user.modify-address',compact('address'));
+        return view('user.modify-address', compact('address'));
     }
 
     public function update_address(Request $request, $id)
-{
-    // Validate the input
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'phone' => 'required|string|max:15',
-        'zip' => 'required|string|max:10',
-        'province' => 'required|string|max:255',
-        'city' => 'required|string|max:255',
-        'address' => 'required|string|max:255',
-        'locality' => 'required|string|max:255',
-        'landmark' => 'required|string|max:255',
-        'district' => 'required|string|max:255',
-        'isdefault' => 'nullable|boolean',
-    ]);
+    {
+        // Validate the input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:15',
+            'zip' => 'required|string|max:10',
+            'province' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'locality' => 'required|string|max:255',
+            'landmark' => 'required|string|max:255',
+            'district' => 'required|string|max:255',
+            'isdefault' => 'nullable|boolean',
+        ]);
 
-    try {
-        // Find the address by ID
-        $address = Address::findOrFail($id);
+        try {
+            // Find the address by ID
+            $address = Address::findOrFail($id);
 
-        // Update address fields
-        $address->name = $request->name;
-        $address->phone = $request->phone;
-        $address->zip = $request->zip;
-        $address->province = $request->province;
-        $address->city = $request->city;
-        $address->address = $request->address;
-        $address->locality = $request->locality;
-        $address->landmark = $request->landmark;
-        $address->district = $request->district;
-        $address->is_default = $request->isdefault ? 1 : 0;
+            // Update address fields
+            $address->name = $request->name;
+            $address->phone = $request->phone;
+            $address->zip = $request->zip;
+            $address->province = $request->province;
+            $address->city = $request->city;
+            $address->address = $request->address;
+            $address->locality = $request->locality;
+            $address->landmark = $request->landmark;
+            $address->district = $request->district;
+            $address->is_default = $request->isdefault ? 1 : 0;
 
-        $address->save();
+            $address->save();
 
-        // If "is_default" is checked, reset other addresses' defaults
-        if ($address->is_default) {
-            Address::where('user_id', $address->user_id)
-                ->where('id', '!=', $address->id)
-                ->update(['is_default' => 0]);
+            // If "is_default" is checked, reset other addresses' defaults
+            if ($address->is_default) {
+                Address::where('user_id', $address->user_id)
+                    ->where('id', '!=', $address->id)
+                    ->update(['is_default' => 0]);
+            }
+
+            return redirect()->route('user.address-details')->with('success', 'Address updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to add address. Please try again.');
         }
-
-        return redirect()->route('user.address-details')->with('success', 'Address updated successfully!');
-    } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Failed to add address. Please try again.');
     }
-}
-
 }

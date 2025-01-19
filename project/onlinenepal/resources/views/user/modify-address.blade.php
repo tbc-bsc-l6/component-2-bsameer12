@@ -135,8 +135,8 @@
                                         <div class="col-md-6">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" value="1"
-                                                    id="isdefault" name="isdefault" @if($address->isdefault == 1) checked @endif
-                                                    >
+                                                    id="isdefault" name="isdefault"
+                                                    @if ($address->isdefault == 1) checked @endif>
                                                 <label class="form-check-label" for="isdefault">
                                                     Make as Default address
                                                 </label>

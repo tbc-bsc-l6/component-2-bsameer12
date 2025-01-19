@@ -21,7 +21,7 @@
                             class="needs-validation" novalidate="">
                             @csrf
                             @method('PUT')
-                            <input type="hidden" name="id" id="id" value="{{ $user->id}}" />
+                            <input type="hidden" name="id" id="id" value="{{ $user->id }}" />
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-floating my-3">
@@ -56,7 +56,7 @@
                                 class="needs-validation" novalidate="">
                                 @csrf
                                 @method('PUT')
-                                <input type="hidden" name="id" id="id" value="{{ $user->id}}" />
+                                <input type="hidden" name="id" id="id" value="{{ $user->id }}" />
                                 <div class="col-md-12">
                                     <div class="my-3">
                                         <h5 class="text-uppercase mb-0">Password Change</h5>

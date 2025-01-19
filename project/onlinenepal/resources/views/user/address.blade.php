@@ -34,7 +34,7 @@
                         <div class="my-account__address-item col-md-6">
                             <div class="my-account__address-item__title">
                                 <h5>{{ Auth::user()->name }} <i class="fa fa-check-circle text-success"></i></h5>
-                                <a href="{{route('user.address-modify')}}">Edit</a>
+                                <a href="{{ route('user.address-modify') }}">Edit</a>
                             </div>
                             <div class="my-account__address-item__detail">
                                 @if ($address)
