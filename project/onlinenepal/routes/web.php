@@ -127,6 +127,10 @@ Route::middleware(['auth', AdminAuthentication::class])->group(function () {
     Route::put('/update-details', [ControllerAdmin::class, 'updateDetails'])->name('admin.updateDetails');
     Route::put('/update-password', [ControllerAdmin::class, 'updatePassword'])->name('admin.updatePassword');
 
+    Route::get('/admin/users', [ControllerAdmin::class, 'usersWithOrderCount'])->name('admin.users');
+    Route::delete('/admin/user/remove/{id}', [ControllerAdmin::class, 'remove_user'])->name('admin.user.remove');
+
+
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

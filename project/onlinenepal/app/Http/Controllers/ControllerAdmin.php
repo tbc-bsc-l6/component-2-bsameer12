@@ -24,7 +24,7 @@ class ControllerAdmin extends Controller
 {
     public function index()
     {
-        $orders = Order::orderBy('created_at','DESC')->get()->take(10);
+        $orders = Order::orderBy('created_at', 'DESC')->get()->take(10);
         $data_for_dashboard = DB::select("Select sum(total) As Total_Sales_Amount,
                                             sum(discount) As Total_Discount_Amount,
                                             sum(if(status='ordered',total,0)) As Total_Ordered_Amount,
@@ -48,7 +48,7 @@ class ControllerAdmin extends Controller
         // Get the product with the maximum regular_price
         $max_price_product = Product::orderBy('regular_price', 'DESC')->first();
         $max_price_product_name = $max_price_product ? $max_price_product->name : 'No products available';
-        return view('admin.index',compact('orders','data_for_dashboard','total_brand','total_categories','total_products','min_price_product_name','max_price_product_name','total_coupons','total_quantity_sold'));
+        return view('admin.index', compact('orders', 'data_for_dashboard', 'total_brand', 'total_categories', 'total_products', 'min_price_product_name', 'max_price_product_name', 'total_coupons', 'total_quantity_sold'));
     }
 
     public function brands()
@@ -727,6 +727,24 @@ class ControllerAdmin extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to update password. Please try again.');
         }
+    }
+
+    public function usersWithOrderCount()
+    {
+        // Fetch users with order count
+        $users = User::withCount('orders')->orderBy('id', 'Desc')->paginate(12);
+
+        // Pass the data to the view
+        return view('admin.users', compact('users'));
+    }
+
+    public function remove_user($id)
+    {
+        $user = User::find($id);
+        $user_name = $user->name;
+        $user->delete();
+        return redirect()->route('admin.users')->with('status', 'User ' . $user_name . " has been deleted successfully!");
+        ;
     }
 
 }
