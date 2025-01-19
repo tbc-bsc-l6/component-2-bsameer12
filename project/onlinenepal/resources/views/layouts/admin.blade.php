@@ -199,9 +199,6 @@
                                     <div class="popup-wrap user type-header">
                                         <div class="dropdown">
                                             <span class="header-user wg-user">
-                                                <span class="image">
-                                                    <img src="images/avatar/user-1.png" alt="">
-                                                </span>
                                                 <span class="flex flex-column">
                                                     <span class="body-title mb-2">{{ auth()->user()->name }}</span>
                                                     <span class="text-tiny"

@@ -16,7 +16,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\str;
 use Illuminate\Support\Facades\File;
-use Intervention\Image\Laravel\Facades\Image;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -68,7 +68,7 @@ class ControllerAdmin extends Controller
             [
                 'name' => 'required',
                 'slug' => 'required|unique:brands,slug',
-                'image' => 'mimes:png,jpg|max:2048'
+                'image' => 'required|mimes:jpeg,png,gif|max:2048',
             ]
         );
 
@@ -86,12 +86,64 @@ class ControllerAdmin extends Controller
 
     public function SaveBrandImage($image, $filename)
     {
-        $destination_path = public_path("uploads/brands");
-        $img = Image::read($image->path());
-        $img->cover(124, 124, 'top');
-        $img->resize(124, 124, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save($destination_path . '/' . $filename);
+        // Define the destination path
+        $destinationPath = public_path("uploads/brands");
+
+        // Get the image type and create a GD resource
+        $imagePath = $image->path();
+        list($width, $height, $type) = getimagesize($imagePath);
+
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                $sourceImage = imagecreatefromjpeg($imagePath);
+                break;
+            case IMAGETYPE_PNG:
+                $sourceImage = imagecreatefrompng($imagePath);
+                break;
+            case IMAGETYPE_GIF:
+                $sourceImage = imagecreatefromgif($imagePath);
+                break;
+            default:
+                throw new \Exception('Unsupported image type.');
+        }
+
+        // Resize and crop to 124x124
+        $newWidth = 124;
+        $newHeight = 124;
+        $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+
+        // Maintain aspect ratio and crop
+        imagecopyresampled(
+            $resizedImage,
+            $sourceImage,
+            0,
+            0,
+            0,
+            0,
+            $newWidth,
+            $newHeight,
+            $width,
+            $height
+        );
+
+        // Save the resized image
+        $savePath = $destinationPath . '/' . $filename;
+
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                imagejpeg($resizedImage, $savePath, 90);
+                break;
+            case IMAGETYPE_PNG:
+                imagepng($resizedImage, $savePath);
+                break;
+            case IMAGETYPE_GIF:
+                imagegif($resizedImage, $savePath);
+                break;
+        }
+
+        // Free memory
+        imagedestroy($sourceImage);
+        imagedestroy($resizedImage);
     }
 
     public function modify_brand($id)
@@ -106,7 +158,7 @@ class ControllerAdmin extends Controller
             [
                 'name' => 'required',
                 'slug' => 'required|unique:brands,slug,' . $request->id,
-                'image' => 'mimes:png,jpg|max:2048'
+                'image' => 'required|mimes:jpeg,png,gif|max:2048',
             ]
         );
 
@@ -155,7 +207,7 @@ class ControllerAdmin extends Controller
             [
                 'name' => 'required',
                 'slug' => 'required|unique:categories,slug',
-                'image' => 'mimes:png,jpg|max:2048'
+                'image' => 'required|mimes:jpeg,png,gif|max:2048',
             ]
         );
 
@@ -173,12 +225,71 @@ class ControllerAdmin extends Controller
 
     public function SaveCategoryImage($image, $filename)
     {
-        $destination_path = public_path("uploads/category_images");
-        $img = Image::read($image->path());
-        $img->cover(124, 124, 'top');
-        $img->resize(124, 124, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save($destination_path . '/' . $filename);
+        // Define the destination path
+        $destinationPath = public_path("uploads/category_images");
+
+        // Get the image details and create a GD image resource
+        $imagePath = $image->path();
+        list($width, $height, $type) = getimagesize($imagePath);
+
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                $sourceImage = imagecreatefromjpeg($imagePath);
+                break;
+            case IMAGETYPE_PNG:
+                $sourceImage = imagecreatefrompng($imagePath);
+                break;
+            case IMAGETYPE_GIF:
+                $sourceImage = imagecreatefromgif($imagePath);
+                break;
+            default:
+                throw new \Exception('Unsupported image type.');
+        }
+
+        // Resize and crop the image to 124x124
+        $newWidth = 124;
+        $newHeight = 124;
+        $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+
+        // Preserve transparency for PNG and GIF
+        if ($type == IMAGETYPE_PNG || $type == IMAGETYPE_GIF) {
+            imagecolortransparent($resizedImage, imagecolorallocatealpha($resizedImage, 0, 0, 0, 127));
+            imagealphablending($resizedImage, false);
+            imagesavealpha($resizedImage, true);
+        }
+
+        // Resize and crop the image
+        imagecopyresampled(
+            $resizedImage,
+            $sourceImage,
+            0,
+            0,
+            0,
+            0,
+            $newWidth,
+            $newHeight,
+            $width,
+            $height
+        );
+
+        // Save the resized image
+        $savePath = $destinationPath . '/' . $filename;
+
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                imagejpeg($resizedImage, $savePath, 90);
+                break;
+            case IMAGETYPE_PNG:
+                imagepng($resizedImage, $savePath);
+                break;
+            case IMAGETYPE_GIF:
+                imagegif($resizedImage, $savePath);
+                break;
+        }
+
+        // Free memory
+        imagedestroy($sourceImage);
+        imagedestroy($resizedImage);
     }
 
 
@@ -194,7 +305,7 @@ class ControllerAdmin extends Controller
             [
                 'name' => 'required',
                 'slug' => 'required|unique:categories,slug,' . $request->id,
-                'image' => 'mimes:png,jpg|max:2048'
+                'image' => 'required|mimes:jpeg,png,gif|max:2048',
             ]
         );
 
@@ -236,7 +347,7 @@ class ControllerAdmin extends Controller
     {
         $categories = Category::select('id', 'name')->orderBy('name')->get();
         $brands = Brand::select('id', 'name')->orderBy('name')->get();
-        return redirect()->route('admin.product.create', compact('categories', 'brands'));
+        return view('admin.product_create', compact('categories', 'brands'));
     }
 
 
@@ -256,8 +367,8 @@ class ControllerAdmin extends Controller
                 'quantity' => 'required',
                 'category_id' => 'required',
                 'brand_id' => 'required',
-                'image' => 'required|mimes:png,jpg|max:2048',
-                'images.*' => 'nullable|mimes:png,jpg,jpeg|max:2048'
+                'image' => 'required|mimes:jpeg,png,gif|max:2048',
+                'images.*' => 'nullable|mimes:png,jpg,jpeg,gif|max:2048',
 
             ]
         );
@@ -305,12 +416,88 @@ class ControllerAdmin extends Controller
 
     public function SaveProductsImage($image, $filename)
     {
-        $destination_path = public_path("uploads/products");
-        $img = Image::read($image->path());
-        $img->cover(540, 689, 'top');
-        $img->resize(540, 689, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save($destination_path . '/' . $filename);
+        // Define the destination path
+        $destinationPath = public_path("uploads/products");
+
+        // Get the image details and create a GD image resource
+        $imagePath = $image->path();
+        list($width, $height, $type) = getimagesize($imagePath);
+
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                $sourceImage = imagecreatefromjpeg($imagePath);
+                break;
+            case IMAGETYPE_PNG:
+                $sourceImage = imagecreatefrompng($imagePath);
+                break;
+            case IMAGETYPE_GIF:
+                $sourceImage = imagecreatefromgif($imagePath);
+                break;
+            default:
+                throw new \Exception('Unsupported image type.');
+        }
+
+        // Resize and crop the image to 540x689
+        $newWidth = 540;
+        $newHeight = 689;
+        $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+
+        // Preserve transparency for PNG and GIF
+        if ($type == IMAGETYPE_PNG || $type == IMAGETYPE_GIF) {
+            imagecolortransparent($resizedImage, imagecolorallocatealpha($resizedImage, 0, 0, 0, 127));
+            imagealphablending($resizedImage, false);
+            imagesavealpha($resizedImage, true);
+        }
+
+        // Resize and crop the image
+        $aspectRatio = $width / $height;
+        $targetAspectRatio = $newWidth / $newHeight;
+
+        if ($aspectRatio > $targetAspectRatio) {
+            // Image is wider than the target ratio
+            $srcWidth = $height * $targetAspectRatio;
+            $srcHeight = $height;
+            $srcX = ($width - $srcWidth) / 2;
+            $srcY = 0;
+        } else {
+            // Image is taller than the target ratio
+            $srcWidth = $width;
+            $srcHeight = $width / $targetAspectRatio;
+            $srcX = 0;
+            $srcY = ($height - $srcHeight) / 2;
+        }
+
+        imagecopyresampled(
+            $resizedImage,
+            $sourceImage,
+            0,
+            0,
+            $srcX,
+            $srcY,
+            $newWidth,
+            $newHeight,
+            $srcWidth,
+            $srcHeight
+        );
+
+        // Save the resized image
+        $savePath = $destinationPath . '/' . $filename;
+
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                imagejpeg($resizedImage, $savePath, 90);
+                break;
+            case IMAGETYPE_PNG:
+                imagepng($resizedImage, $savePath);
+                break;
+            case IMAGETYPE_GIF:
+                imagegif($resizedImage, $savePath);
+                break;
+        }
+
+        // Free memory
+        imagedestroy($sourceImage);
+        imagedestroy($resizedImage);
     }
 
     public function modify_products($id)
@@ -338,8 +525,8 @@ class ControllerAdmin extends Controller
                 'quantity' => 'required',
                 'category_id' => 'required',
                 'brand_id' => 'required',
-                'image' => 'nullable|mimes:png,jpg|max:2048',
-                'images.*' => 'nullable|mimes:png,jpg,jpeg|max:2048'
+                'image' => 'nullable|mimes:png,jpg,jpeg,gif|max:2048',
+                'images.*' => 'nullable|mimes:png,jpg,jpeg,gif|max:2048',
             ]
         );
 
@@ -543,7 +730,7 @@ class ControllerAdmin extends Controller
             'tagline' => 'required',
             'title' => 'required',
             'subtitle' => 'required',
-            'image' => 'required|mimes:png,jpeg,jpg|max:2048',
+            'image' => 'required|mimes:png,jpg,jpeg,gif|max:2048',
             'link' => 'required',
             'status' => 'required',
         ]);
@@ -566,12 +753,89 @@ class ControllerAdmin extends Controller
 
     public function SaveSlideImage($image, $filename)
     {
-        $destination_path = public_path("uploads/slides");
-        $img = Image::read($image->path());
-        $img->cover(400, 690, 'top');
-        $img->resize(400, 690, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save($destination_path . '/' . $filename);
+        // Define the destination path
+        $destinationPath = public_path("uploads/slides");
+
+        // Get the image details and create a GD image resource
+        $imagePath = $image->path();
+        list($width, $height, $type) = getimagesize($imagePath);
+
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                $sourceImage = imagecreatefromjpeg($imagePath);
+                break;
+            case IMAGETYPE_PNG:
+                $sourceImage = imagecreatefrompng($imagePath);
+                break;
+            case IMAGETYPE_GIF:
+                $sourceImage = imagecreatefromgif($imagePath);
+                break;
+            default:
+                throw new \Exception('Unsupported image type.');
+        }
+
+        // Resize and crop the image to 400x690
+        $newWidth = 600;
+        $newHeight = 1200;
+        $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+
+        // Preserve transparency for PNG and GIF
+        if ($type == IMAGETYPE_PNG || $type == IMAGETYPE_GIF) {
+            imagecolortransparent($resizedImage, imagecolorallocatealpha($resizedImage, 0, 0, 0, 127));
+            imagealphablending($resizedImage, false);
+            imagesavealpha($resizedImage, true);
+        }
+
+        // Resize and crop the image while maintaining aspect ratio
+        $srcAspectRatio = $width / $height;
+        $dstAspectRatio = $newWidth / $newHeight;
+
+        if ($srcAspectRatio > $dstAspectRatio) {
+            // Crop width
+            $newSrcWidth = (int)($height * $dstAspectRatio);
+            $srcX = (int)(($width - $newSrcWidth) / 2);
+            $srcY = 0;
+            $newWidth = $newSrcWidth;
+        } else {
+            // Crop height
+            $newSrcHeight = (int)($width / $dstAspectRatio);
+            $srcX = 0;
+            $srcY = (int)(($height - $newSrcHeight) / 2);
+            $newHeight = $newSrcHeight;
+        }
+
+        // Copy and resize the image
+        imagecopyresampled(
+            $resizedImage,
+            $sourceImage,
+            0,
+            0,
+            $srcX,
+            $srcY,
+            $newWidth,
+            $newHeight,
+            $newWidth,
+            $newHeight
+        );
+
+        // Save the resized image
+        $savePath = $destinationPath . '/' . $filename;
+
+        switch ($type) {
+            case IMAGETYPE_JPEG:
+                imagejpeg($resizedImage, $savePath, 90);
+                break;
+            case IMAGETYPE_PNG:
+                imagepng($resizedImage, $savePath);
+                break;
+            case IMAGETYPE_GIF:
+                imagegif($resizedImage, $savePath);
+                break;
+        }
+
+        // Free memory
+        imagedestroy($sourceImage);
+        imagedestroy($resizedImage);
     }
 
     public function modify_slider($id)
@@ -587,7 +851,7 @@ class ControllerAdmin extends Controller
             'tagline' => 'required',
             'title' => 'required',
             'subtitle' => 'required',
-            'image' => 'required|mimes:png,jpeg,jpg|max:2048',
+            'image' => 'required|mimes:png,jpg,jpeg,gif|max:2048',
             'link' => 'required',
             'status' => 'required',
         ]);

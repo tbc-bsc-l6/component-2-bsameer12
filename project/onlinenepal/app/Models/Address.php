@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Address extends Model
 {
+    use HasFactory;
     protected $table = 'addresses'; // Specify table name if it doesn't follow convention
 
     protected $fillable = [
@@ -19,12 +21,12 @@ class Address extends Model
         'locality',
         'landmark',
         'district',
-        'is_default',
         'country',
+        'isdefault'
     ];
 
     protected $attributes = [
-        'is_default' => 0, // Default value for 'is_default'
+        'isdefault' => 0, // Default value for 'is_default'
     ];
 
     public function user()

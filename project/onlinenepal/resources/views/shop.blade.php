@@ -251,16 +251,6 @@
                                             @endif
                                         </span>
                                     </div>
-
-                                    <div class="d-flex align-items-center mt-1">
-                                        <a href="#" class="swatch-color pc__swatch-color"
-                                            style="color: #222222"></a>
-                                        <a href="#" class="swatch-color swatch_active pc__swatch-color"
-                                            style="color: #b9a16b"></a>
-                                        <a href="#" class="swatch-color pc__swatch-color"
-                                            style="color: #f5e6e0"></a>
-                                    </div>
-
                                     @if (Cart::instance('wishlist')->content()->where('id', $product->id)->count() > 0)
                                         <form method="POST"
                                             action="{{ route('wishlist.delete', ['rowId' => Cart::instance('wishlist')->content()->where('id', $product->id)->first()->rowId]) }}">
