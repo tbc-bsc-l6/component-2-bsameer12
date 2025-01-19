@@ -38,6 +38,7 @@ class Order extends Model
         'city',
         'province',
         'district',
-        'zip'
+        'zip',
+        'country'
     ];
 }

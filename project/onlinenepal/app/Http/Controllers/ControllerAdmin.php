@@ -775,8 +775,8 @@ class ControllerAdmin extends Controller
         }
 
         // Resize and crop the image to 400x690
-        $newWidth = 600;
-        $newHeight = 1200;
+        $newWidth = 1000;
+        $newHeight = 2000;
         $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
 
         // Preserve transparency for PNG and GIF

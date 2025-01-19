@@ -34,13 +34,8 @@ Route::delete('/wishlist/delete/{rowId}', [ControllerWishlist::class, 'wishlist_
 Route::delete('/wishlist/clear', [ControllerWishlist::class, 'wishlist_empty'])->name('wishlist.clear');
 Route::post('/wishlist/move-to-cart/{rowId}', [ControllerWishlist::class, 'wishlist_to_cart'])->name('wishlist.move.to.cart');
 
-//Route::get('/checkout/paypal', [ControllerCart::class, 'handlePayPal'])->name('cart.checkout.paypal');
-Route::match(['get', 'post'], '/checkout/paypal', [ControllerCart::class, 'handlePayPal'])->name('cart.checkout.paypal');
 
-Route::get('/checkout/paypal-success', [ControllerCart::class, 'paypalSuccess'])->name('paypal.success');
-Route::get('/checkout/paypal-cancel', [ControllerCart::class, 'paypalCancel'])->name('paypal.cancel');
-
-
+Route::get('/search', [HomeController::class, 'product_search'])->name('home.search');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/account-dashboard', [ControllerUser::class, 'index'])->name('user.index');
@@ -49,21 +44,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/account/orders/details/{order_id}', [ControllerUser::class, 'details_about_orders'])->name('user.order.details');
     Route::put('/account/orders/cancel', [ControllerUser::class, 'order_status_update'])->name('user.order.cancel');
     Route::get('/account-details', [ControllerUser::class, 'dashboard'])->name('user.dashboard');
-    Route::put('/update-details', [ControllerUser::class, 'updateDetails'])->name('user.updateDetails');
     Route::put('/update-password', [ControllerUser::class, 'updatePassword'])->name('user.updatePassword');
     Route::get('/user-address-details', [ControllerUser::class, 'user_address'])->name('user.address-details');
     Route::get('/user-address-create', [ControllerUser::class, 'create_address'])->name('user.address-create');
     Route::post('/user/address/create', [ControllerUser::class, 'storeAddress'])->name('user.address.store');
     Route::get('/user-address-modify', [ControllerUser::class, 'modify_address'])->name('user.address-modify');
     Route::put('/user/address/update/{id}', [ControllerUser::class, 'update_address'])->name('user.address.update');
-});
+
 
 
 Route::get('/checkout}', [ControllerCart::class, 'checkout'])->name('cart.checkout');
 Route::post('/place-order}', [ControllerCart::class, 'order_place'])->name('cart.checkout.place.order');
 Route::get('/confirmation-of-order}', [ControllerCart::class, 'confirmation_of_order'])->name('cart.confirmation.of.order');
 
-Route::get('/search', [HomeController::class, 'product_search'])->name('home.search');
 
 Route::post('/forgot-password/send-otp', [ForgotPasswordController::class, 'sendOtp'])->name('password.email');
 Route::get('/forgot-password/email', [ForgotPasswordController::class, 'reset_email'])->name('forgot-password.email');
@@ -74,7 +67,15 @@ Route::get('/verify-otp', [OtpVerificationController::class, 'showVerifyOtpForm'
 Route::post('/verify-otp', [OtpVerificationController::class, 'verifyOtp'])->name('verify.otp.submit');
 Route::post('/resend-otp', [RegisterController::class, 'resendOtp'])->name('resend.otp');
 
+//Route::get('/checkout/paypal', [ControllerCart::class, 'handlePayPal'])->name('cart.checkout.paypal');
+Route::match(['get', 'post'], '/checkout/paypal', [ControllerCart::class, 'handlePayPal'])->name('cart.checkout.paypal');
 
+Route::get('/checkout/paypal-success', [ControllerCart::class, 'paypalSuccess'])->name('paypal.success');
+Route::get('/checkout/paypal-cancel', [ControllerCart::class, 'paypalCancel'])->name('paypal.cancel');
+
+});
+
+Route::put('/update-details', [ControllerUser::class, 'updateDetails'])->name('user.update.details');
 
 Route::middleware(['auth', AdminAuthentication::class])->group(function () {
     Route::get('/admin', [ControllerAdmin::class, 'index'])->name('admin.index');

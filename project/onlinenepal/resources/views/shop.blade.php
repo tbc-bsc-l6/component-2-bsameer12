@@ -7,9 +7,7 @@
                     <h3 class="text-uppercase fs-6 mb-0">Filter By</h3>
                     <button class="btn-close-lg js-close-aside btn-close-aside ms-auto"></button>
                 </div>
-
                 <div class="pt-4 pt-lg-0"></div>
-
                 <div class="accordion" id="categories-list">
                     <div class="accordion-item mb-4 pb-3">
                         <h5 class="accordion-header" id="accordion-heading-1">
@@ -33,9 +31,9 @@
                                     @foreach ($categories as $category)
                                         <li class="list-item">
                                             <span class="menu-link py-1">
-                                                <input type="checkbox" name="categories" value="{{ $category->name }}"
+                                                <input type="checkbox" name="categories" value="{{ $category->id }}"
                                                     class="chk-category"
-                                                    @if (in_array($category->id, explode(',', $categories_fliter))) checked="checked" @endif>
+                                                    @if (in_array($category->id, $categories_filter)) checked="checked" @endif>
                                                 {{ $category->name }}
                                             </span>
                                             <span class="text-right float-end">
@@ -71,9 +69,9 @@
                                     @foreach ($brands as $brand)
                                         <li class="list-item">
                                             <span class="menu-link py-1">
-                                                <input type="checkbox" name="brands" value="{{ $brand->name }}"
+                                                <input type="checkbox" name="brands" value="{{ $brand->id}}"
                                                     class="chk-brand"
-                                                    @if (in_array($brand->id, explode(',', $brand_fliter))) checked="checked" @endif>
+                                                    @if (in_array($brand->id, $brand_filter)) checked="checked" @endif>
                                                 {{ $brand->name }}
                                             </span>
                                             <span class="text-right float-end">
@@ -94,8 +92,7 @@
                                 data-bs-toggle="collapse" data-bs-target="#accordion-filter-price" aria-expanded="true"
                                 aria-controls="accordion-filter-price">
                                 Price
-                                <svg class="accordion-button__icon type2" viewBox="0 0 10 6"
-                                    xmlns="http://www.w3.org/2000/svg">
+                                <svg class="accordion-button__icon type2" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
                                     <g aria-hidden="true" stroke="none" fill-rule="evenodd">
                                         <path
                                             d="M5.35668 0.159286C5.16235 -0.053094 4.83769 -0.0530941 4.64287 0.159286L0.147611 5.05963C-0.0492049 5.27473 -0.049205 5.62357 0.147611 5.83813C0.344427 6.05323 0.664108 6.05323 0.860924 5.83813L5 1.32706L9.13858 5.83867C9.33589 6.05378 9.65507 6.05378 9.85239 5.83867C10.0492 5.62357 10.0492 5.27473 9.85239 5.06018L5.35668 0.159286Z" />
@@ -103,24 +100,61 @@
                                 </svg>
                             </button>
                         </h5>
-                        <div id="accordion-filter-price" class="accordion-collapse collapse show border-0"
-                            aria-labelledby="accordion-heading-price" data-bs-parent="#price-filters">
-                            <input class="price-range-slider" type="text" name="price_range" value=""
-                                data-slider-min="1" data-slider-max="1000000" data-slider-step="100"
-                                data-slider-value="[250,450]" data-currency="Rs." />
+                
+                        <div id="accordion-filter-price" class="accordion-collapse collapse show border-0" aria-labelledby="accordion-heading-price" data-bs-parent="#price-filters">
+                            <!-- noUiSlider Container -->
+                            <div id="price-range-slider" 
+                                style="
+                                    width: 90%; 
+                                    height: 6px; 
+                                    margin: 20px auto; 
+                                    background-color: #ddd; 
+                                    border-radius: 4px; 
+                                    position: relative;">
+                            </div>
+                
+                            <!-- Handles for noUiSlider -->
+                            <div class="noUi-handle" 
+                                style="
+                                    width: 12px; 
+                                    height: 12px; 
+                                    position: absolute; 
+                                    top: -3px; 
+                                    left: 0; /* Adjust as per initial position */
+                                    background-color: #007bff; 
+                                    border: 2px solid #fff; 
+                                    border-radius: 50%; 
+                                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                            </div>
+                
+                            <div class="noUi-handle" 
+                                style="
+                                    width: 12px; 
+                                    height: 12px; 
+                                    position: absolute; 
+                                    top: -3px; 
+                                    right: 0; /* Adjust as per initial position */
+                                    background-color: #007bff; 
+                                    border: 2px solid #fff; 
+                                    border-radius: 50%; 
+                                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+                            </div>
+                
                             <div class="price-range__info d-flex align-items-center mt-2">
                                 <div class="me-auto">
                                     <span class="text-secondary">Min Price: </span>
-                                    <span class="price-range__min">Rs. {{ $minimum_price }}</span>
+                                    <span class="price-range__min" id="min-price-display">Rs. 250</span>
                                 </div>
                                 <div>
                                     <span class="text-secondary">Max Price: </span>
-                                    <span class="price-range__max">Rs. {{ $maximum_price }}</span>
+                                    <span class="price-range__max" id="max-price-display">Rs. 450</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
+                
             </div>
 
             <div class="shop-list flex-grow-1">
@@ -308,60 +342,96 @@
 
     <form id="fliterform" method="GET" action="{{ route('shop.index') }}">
         <input type="hidden" name="page" value="{{ $products->currentPage() }}">
-        <input type="hidden" name="size" id="size" value="{{ $size }}">
-        <input type="hidden" name="order" id="order" value="{{ $order }}">
-        <input type="hidden" name="brands" id="hdnbrands" />
-        <input type="hidden" name="brands" id="hdncategories" />
-        <input type="hidden" name="min" id="hdnminimum_price" value="{{ $minimum_price }}" />
-        <input type="hidden" name="max" id="hdnmaximum_price" value="{{ $maximum_price }}" />
+    <input type="hidden" name="size" id="size" value="{{ $size }}">
+    <input type="hidden" name="order" id="order" value="{{ $order }}">
+    <input type="hidden" name="brands" id="hdnbrands" value="{{ implode(',', $brand_filter) }}">
+    <input type="hidden" name="categories" id="hdncategories" value="{{ implode(',', $categories_filter) }}">
+    <input type="hidden" name="min" id="hdnminimum_price" value="{{ $minimum_price }}">
+    <input type="hidden" name="max" id="hdnmaximum_price" value="{{ $maximum_price }}">
     </form>
 @endsection
 @push('website-script')
-    <script>
-        $(function() {
-            $("#pagesize").on("change", function() {
-                $("#size").val($(this).val()); // Correctly fetch the value of the selected option
-                $("#fliterform").submit();
-            });
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
+<script>
+$(function(){
+    $("#pagesize").on("change", function() {
+        $("#size").val($(this).val()); // Correctly fetch the value of the selected option
+        $("#fliterform").submit();
+    });
 
-            $("#orderby").on("change", function() {
-                $("#order").val($(this).val()); // Correctly fetch the value of the selected option
-                $("#fliterform").submit();
-            });
-            $("input[name='brands']").on("change", function() {
-                var brands = "";
-                $("input[name='brands']:checked").each(function() {
-                    if (brands == "") {
-                        brands += $(this).val();
-                    } else {
-                        brands += "," + $(this).val();
-                    }
-                });
-                $("#hdnbrands").val(brands); // Correctly fetch the value of the selected option
-                $("#fliterform").submit();
-            });
-            $("input[name='categories']").on("change", function() {
-                var categories = "";
-                $("input[name='categories']:checked").each(function() {
-                    if (categories == "") {
-                        categories += $(this).val();
-                    } else {
-                        categories += "," + $(this).val();
-                    }
-                });
-                $("#hdncategories").val(categories); // Correctly fetch the value of the selected option
-                $("#fliterform").submit();
-            });
-            $("[name='price_range']").on('change', function() {
-                var min = $(this).val().split(',')[0];
-                var max = $(this).val().split(',')[1];
-                $('#hdnminimum_price').val(min);
-                $('#hdnmaximum_price').val(max);
-                setTimeout(() => {
-                    $("#fliterform").submit();
-                }, 5000);
-
-            });
+    $("#orderby").on("change", function() {
+        $("#order").val($(this).val()); // Correctly fetch the value of the selected option
+        $("#fliterform").submit();
+    });
+    $("input[name='brands']").on("change",function(){
+        var brands = "";
+        $("input[name='brands']:checked").each(function(){
+            if(brands == ""){
+                brands += $(this).val();
+            }
+            else
+            {
+                brands += "," + $(this).val();
+            }
         });
-    </script>
-@endpush
+        $("#hdnbrands").val(brands); // Correctly fetch the value of the selected option
+        $("#fliterform").submit();
+    });
+    $("input[name='categories']").on("change",function(){
+        var categories = "";
+        $("input[name='categories']:checked").each(function(){
+            if(categories == ""){
+                categories += $(this).val();
+            }
+            else
+            {
+                categories += "," + $(this).val();
+            }
+        });
+        $("#hdncategories").val(categories); // Correctly fetch the value of the selected option
+        $("#fliterform").submit();
+    });
+});
+    document.addEventListener('DOMContentLoaded', function () {
+        const slider = document.getElementById('price-range-slider');
+
+        // Dynamically get min and max price from PHP variables
+        const minPrice = <?php echo $minimum_price; ?>;
+        const maxPrice = <?php echo $maximum_price; ?>;
+
+        // Initialize noUiSlider
+        noUiSlider.create(slider, {
+            start: [250, 450], // Initial min and max values
+            connect: true,
+            range: {
+                'min': minPrice,
+                'max': maxPrice
+            },
+            step: 100,
+            tooltips: [false, false],
+            format: {
+                to: function (value) {
+                    return Math.round(value);
+                },
+                from: function (value) {
+                    return Number(value);
+                }
+            }
+        });
+
+        // Update displayed values dynamically
+        slider.noUiSlider.on('update', function (values) {
+            document.getElementById('min-price-display').innerText = 'Rs. ' + values[0];
+            document.getElementById('max-price-display').innerText = 'Rs. ' + values[1];
+        });
+
+        // Submit form when values change
+        slider.noUiSlider.on('change', function (values) {
+            document.getElementById('hdnminimum_price').value = values[0];
+            document.getElementById('hdnmaximum_price').value = values[1];
+            setTimeout(() => { document.getElementById('fliterform').submit(); }, 2000);
+        });
+    });
+
+</script>
+@endpush 

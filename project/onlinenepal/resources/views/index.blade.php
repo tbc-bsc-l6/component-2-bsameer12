@@ -1,51 +1,6 @@
 @extends('layouts.app')
 @section('website-content')
     <main>
-        <section class="swiper-container js-swiper-slider swiper-number-pagination slideshow"
-            data-settings='{
-            "autoplay": {
-            "delay": 5000
-            },
-            "slidesPerView": 1,
-            "effect": "fade",
-            "loop": true
-        }'>
-            <div class="swiper-wrapper">
-                @foreach ($slides as $slide)
-                    <div class="swiper-slide">
-                        <div class="overflow-hidden position-relative h-100">
-                            <div class="slideshow-character position-absolute bottom-0 pos_right-center">
-                                <img loading="lazy" src="{{ asset('uploads/slides') }}/{{ $slide->image }}" width="542"
-                                    height="733" alt="Woman Fashion 1"
-                                    class="slideshow-character__img animate animate_fade animate_btt animate_delay-9 w-auto h-auto" />
-                                <div class="character_markup type2">
-                                    <p
-                                        class="text-uppercase font-sofia mark-grey-color animate animate_fade animate_btt animate_delay-10 mb-0">
-                                        New Arrivals</p>
-                                </div>
-                            </div>
-                            <div class="slideshow-text container position-absolute start-50 top-50 translate-middle">
-                                <h6
-                                    class="text_dash text-uppercase fs-base fw-medium animate animate_fade animate_btt animate_delay-3">
-                                    {{ $slide->title }}</h6>
-                                <h2 class="h1 fw-normal mb-0 animate animate_fade animate_btt animate_delay-5">
-                                    {{ $slide->title }}</h2>
-                                <h2 class="h1 fw-bold animate animate_fade animate_btt animate_delay-5">
-                                    {{ $slide->subtitle }}</h2>
-                                <a href="{{ $slide->link }}"
-                                    class="btn-link btn-link_lg default-underline fw-medium animate animate_fade animate_btt animate_delay-7">Shop
-                                    Now</a>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-            <div class="container">
-                <div
-                    class="slideshow-pagination slideshow-number-pagination d-flex align-items-center position-absolute bottom-0 mb-5">
-                </div>
-            </div>
-        </section>
         <div class="container mw-1620 bg-white border-radius-10">
             <div class="mb-3 mb-xl-5 pt-1 pb-4"></div>
             <section class="category-carousel container">
@@ -133,15 +88,18 @@
                                 <span class="countdown-num d-block"></span>
                                 <span class="countdown-word text-uppercase text-secondary">Hours</span>
                             </div>
+
                             <div class="min countdown-unit">
                                 <span class="countdown-num d-block"></span>
                                 <span class="countdown-word text-uppercase text-secondary">Mins</span>
                             </div>
+
                             <div class="sec countdown-unit">
                                 <span class="countdown-num d-block"></span>
                                 <span class="countdown-word text-uppercase text-secondary">Sec</span>
                             </div>
                         </div>
+
                         <a href="{{ route('shop.index') }}"
                             class="btn-link default-underline text-uppercase fw-medium mt-3">View All</a>
                     </div>
@@ -216,10 +174,14 @@
                     </div>
                 </div>
             </section>
+
             <div class="mb-3 mb-xl-5 pt-1 pb-4"></div>
+
             <div class="mb-3 mb-xl-5 pt-1 pb-4"></div>
+
             <section class="products-grid container">
                 <h2 class="section-title text-center mb-3 pb-xl-3 mb-xl-4">Featured Products</h2>
+
                 <div class="row">
                     @foreach ($featured_products as $product)
                         <div class="col-6 col-md-4 col-lg-3">
@@ -230,6 +192,7 @@
                                             width="330" height="400" alt="{{ $product->name }}" class="pc__img">
                                     </a>
                                 </div>
+
                                 <div class="pc__info position-relative">
                                     <h6 class="pc__title"><a
                                             href="{{ route('shop.product.details', ['product_slug' => $product->slug]) }}">{{ $product->name }}</a>

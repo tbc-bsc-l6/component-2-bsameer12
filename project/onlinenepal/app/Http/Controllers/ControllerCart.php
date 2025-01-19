@@ -185,7 +185,7 @@ class ControllerCart extends Controller
             'city' => $address->city,
             'province' => $address->province,
             'district' => $address->district,
-            'country' => $address->country,
+            'country' => 'Nepal',
             'landmark' => $address->landmark,
             'zip' => $address->zip,
         ]);

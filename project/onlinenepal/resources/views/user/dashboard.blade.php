@@ -17,7 +17,7 @@
                         <div class="alert alert-danger">{{ session('error') }}</div>
                     @endif
                     <div class="my-account__edit-form">
-                        <form name="account_edit_form" action="{{ route('user.updateDetails') }}" method="POST"
+                        <form name="account_edit_form" action="{{ route('user.update.details') }}" method="POST"
                             class="needs-validation" novalidate="">
                             @csrf
                             @method('PUT')
