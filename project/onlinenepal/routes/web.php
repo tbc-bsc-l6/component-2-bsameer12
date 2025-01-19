@@ -10,6 +10,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Middleware\AdminAuthentication;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\OtpVerificationController;
+use App\Http\Controllers\Auth\RegisterController;
 
 Auth::routes();
 
@@ -59,6 +61,12 @@ Route::post('/forgot-password/send-otp', [ForgotPasswordController::class, 'send
 Route::get('/forgot-password/email', [ForgotPasswordController::class, 'reset_email'])->name('forgot-password.email');
 Route::post('/forgot-password/verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('password.verifyOtp');
 Route::put('/forgot-password/reset', [ForgotPasswordController::class, 'resetPassword'])->name('password.reset');
+Route::get('/forgot-password/reset-password', [ForgotPasswordController::class, 'reset_password_form'])->name('forgot-password.reset-password');
+Route::get('/verify-otp', [OtpVerificationController::class, 'showVerifyOtpForm'])->name('verify.otp');
+Route::post('/verify-otp', [OtpVerificationController::class, 'verifyOtp'])->name('verify.otp.submit');
+Route::post('/resend-otp', [RegisterController::class, 'resendOtp'])->name('resend.otp');
+
+
 
 Route::middleware(['auth', AdminAuthentication::class])->group(function () {
     Route::get('/admin', [ControllerAdmin::class, 'index'])->name('admin.index');
@@ -106,6 +114,5 @@ Route::middleware(['auth', AdminAuthentication::class])->group(function () {
     Route::get('/admin/search', [ControllerAdmin::class, 'search'])->name('admin.search');
 
 });
-Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -28,7 +28,7 @@
         </div>
     @enderror
     <h2 style="color: #333;">Verify OTP</h2>
-    <form action="/forgot-password/verify-otp" method="POST" style="margin-top: 20px;">
+    <form action="{{route('password.verifyOtp')}}" method="POST" style="margin-top: 20px;">
         @csrf
         <label for="otp" style="display: block; font-weight: bold; margin-bottom: 8px; color: #555;">OTP</label>
         <input type="text" id="otp" name="otp" required placeholder="Enter the OTP" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">

@@ -59,7 +59,7 @@ class ForgotPasswordController extends Controller
         }
 
         // Allow user to reset password
-        return view('auth.passwords.confirm')->with('success', 'OTP has been verified. You can now reset your password.');
+        return  redirect()->route('forgot-password.reset-password')->with('success', 'OTP has been verified. You can now reset your password.');
     }
 
 
@@ -82,12 +82,18 @@ class ForgotPasswordController extends Controller
     $user->password = Hash::make($request->password);
     $user->save();
 
-    return view('auth.login')->with('success', 'Password has been reset successfully.');
+    return redirect()->route('login')->with('success', 'Password has been reset successfully.');
+
 }
 
 
     public function reset_email()
     {
         return view('auth.passwords.email');
+    }
+
+    public function reset_password_form()
+    {
+        return view('auth.passwords.confirm');
     }
 }

@@ -43,6 +43,16 @@
             {{ $message }}
         </div>
     @enderror
+    @if ($errors->any())
+    <div style="color: red;">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
     <h2 style="color: #333;">Reset Password</h2>
     <form action="{{route('password.reset')}}" method="POST" style="margin-top: 20px;">
         @csrf
@@ -51,10 +61,10 @@
         <input type="email" id="email" name="email" required placeholder="Enter your email" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">
 
         <label for="new_password" style="display: block; font-weight: bold; margin-bottom: 8px; color: #555;">New Password</label>
-        <input type="password" id="new_password" name="new_password" required placeholder="Enter new password" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">
+        <input type="password" id="new_password" name="password" required placeholder="Enter new password" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">
 
         <label for="confirm_password" style="display: block; font-weight: bold; margin-bottom: 8px; color: #555;">Confirm New Password</label>
-        <input type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm new password" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">
+        <input type="password" id="confirm_password" name="password_confirmation" required placeholder="Confirm new password" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;">
 
         <div id="password-message" style="color: red; font-size: 12px; text-align: left; margin-bottom: 15px; display: none;">Passwords do not match.</div>
 

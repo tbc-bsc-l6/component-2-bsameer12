@@ -33,7 +33,7 @@
             </div>
         @enderror
         <h2 style="color: #333;">Forgot Password</h2>
-        <form action="/forgot-password/send-otp" method="POST" style="margin-top: 20px;">
+        <form action="{{route('password.email')}}" method="POST" style="margin-top: 20px;">
             @csrf
             <label for="email" style="display: block; font-weight: bold; margin-bottom: 8px; color: #555;">Email
                 Address</label>

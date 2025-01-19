@@ -260,6 +260,7 @@ class ControllerCart extends Controller
         Session::put('checkout_data', $request->all());
 
         // Example conversion logic
+        $this->amounts_at_checkout();
         $nprAmount = Session::get('checkout')['total']; // Replace with your calculation
         $nprAmount = floatval(str_replace(',', '', $nprAmount)); // Clean and convert to float
         $conversionRate = 120; // 1 USD = 120 NPR
