@@ -123,6 +123,10 @@ Route::middleware(['auth', AdminAuthentication::class])->group(function () {
 
     Route::get('/admin/search', [ControllerAdmin::class, 'search'])->name('admin.search');
 
+    Route::get('/account-settings', [ControllerAdmin::class, 'dashboard'])->name('admin.settings');
+    Route::put('/update-details', [ControllerAdmin::class, 'updateDetails'])->name('admin.updateDetails');
+    Route::put('/update-password', [ControllerAdmin::class, 'updatePassword'])->name('admin.updatePassword');
+
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

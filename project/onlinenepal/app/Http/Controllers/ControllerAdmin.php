@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\User;
 use App\Models\Slide;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ControllerAdmin extends Controller
 {
@@ -652,6 +655,78 @@ class ControllerAdmin extends Controller
         }
 
         return response()->json($results);
+    }
+
+    /**
+     * Show the dashboard with user details.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function dashboard()
+    {
+        // Retrieve the authenticated user
+        $user = Auth::user();
+
+        // Pass the user data to the dashboard view
+        return view('admin.settings', compact('user'));
+    }
+
+    /**
+     * Update user details like name, mobile, and email.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateDetails(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'mobile' => 'required|string|max:15',
+            'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
+        ]);
+
+        $user = User::find($request->id);
+
+        try {
+            $user->name = $request->name;
+            $user->mobile = $request->mobile;
+            $user->email = $request->email;
+            $user->save();
+
+            return back()->with('success', 'Details updated successfully!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to update details. Please try again.');
+        }
+    }
+
+    /**
+     * Update user password after checking the old password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = User::find($request->id);
+
+        if (!Hash::check($request->old_password, $user->password)) {
+            return back()->with('error', 'Old password is incorrect.');
+        }
+
+        try {
+            $user->update([
+                'password' => Hash::make($request->new_password),
+            ]);
+
+            return back()->with('success', 'Password updated successfully!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to update password. Please try again.');
+        }
     }
 
 }
