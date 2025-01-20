@@ -64,27 +64,26 @@ class ForgotPasswordController extends Controller
 
 
     public function resetPassword(Request $request)
-{
-    // Validate the new password
-    $request->validate([
-        'email' => 'required|email|exists:users,email',
-        'password' => 'required|string|min:8|confirmed',
-    ]);
+    {
+        // Validate the new password
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
 
-    // Verify email exists
-    $user = User::where('email', $request->email)->first();
+        // Verify email exists
+        $user = User::where('email', $request->email)->first();
 
-    if (!$user) {
-        return redirect()->back()->withErrors(['email' => 'Email does not exist.']);
+        if (!$user) {
+            return redirect()->back()->withErrors(['email' => 'Email does not exist.']);
+        }
+
+        // Reset the password
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect()->route('login')->with('success', 'Password has been reset successfully.');
     }
-
-    // Reset the password
-    $user->password = Hash::make($request->password);
-    $user->save();
-
-    return redirect()->route('login')->with('success', 'Password has been reset successfully.');
-
-}
 
 
     public function reset_email()

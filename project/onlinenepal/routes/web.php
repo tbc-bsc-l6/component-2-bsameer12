@@ -44,18 +44,28 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/account/orders/details/{order_id}', [ControllerUser::class, 'details_about_orders'])->name('user.order.details');
     Route::put('/account/orders/cancel', [ControllerUser::class, 'order_status_update'])->name('user.order.cancel');
     Route::get('/account-details', [ControllerUser::class, 'dashboard'])->name('user.dashboard');
-    Route::put('/update-password', [ControllerUser::class, 'updatePassword'])->name('user.updatePassword');
+    Route::put('user/update-password', [ControllerUser::class, 'updatePassword'])->name('user.updatePassword');
     Route::get('/user-address-details', [ControllerUser::class, 'user_address'])->name('user.address-details');
     Route::get('/user-address-create', [ControllerUser::class, 'create_address'])->name('user.address-create');
     Route::post('/user/address/create', [ControllerUser::class, 'storeAddress'])->name('user.address.store');
     Route::get('/user-address-modify', [ControllerUser::class, 'modify_address'])->name('user.address-modify');
     Route::put('/user/address/update/{id}', [ControllerUser::class, 'update_address'])->name('user.address.update');
+    Route::put('user/update-details', [ControllerUser::class, 'updateDetails'])->name('user.update.details');
 
 
 
 Route::get('/checkout}', [ControllerCart::class, 'checkout'])->name('cart.checkout');
 Route::post('/place-order}', [ControllerCart::class, 'order_place'])->name('cart.checkout.place.order');
 Route::get('/confirmation-of-order}', [ControllerCart::class, 'confirmation_of_order'])->name('cart.confirmation.of.order');
+
+
+//Route::get('/checkout/paypal', [ControllerCart::class, 'handlePayPal'])->name('cart.checkout.paypal');
+Route::match(['get', 'post'], '/checkout/paypal', [ControllerCart::class, 'handlePayPal'])->name('cart.checkout.paypal');
+
+Route::get('/checkout/paypal-success', [ControllerCart::class, 'paypalSuccess'])->name('paypal.success');
+Route::get('/checkout/paypal-cancel', [ControllerCart::class, 'paypalCancel'])->name('paypal.cancel');
+
+});
 
 
 Route::post('/forgot-password/send-otp', [ForgotPasswordController::class, 'sendOtp'])->name('password.email');
@@ -66,16 +76,6 @@ Route::get('/forgot-password/reset-password', [ForgotPasswordController::class, 
 Route::get('/verify-otp', [OtpVerificationController::class, 'showVerifyOtpForm'])->name('verify.otp');
 Route::post('/verify-otp', [OtpVerificationController::class, 'verifyOtp'])->name('verify.otp.submit');
 Route::post('/resend-otp', [RegisterController::class, 'resendOtp'])->name('resend.otp');
-
-//Route::get('/checkout/paypal', [ControllerCart::class, 'handlePayPal'])->name('cart.checkout.paypal');
-Route::match(['get', 'post'], '/checkout/paypal', [ControllerCart::class, 'handlePayPal'])->name('cart.checkout.paypal');
-
-Route::get('/checkout/paypal-success', [ControllerCart::class, 'paypalSuccess'])->name('paypal.success');
-Route::get('/checkout/paypal-cancel', [ControllerCart::class, 'paypalCancel'])->name('paypal.cancel');
-
-});
-
-Route::put('/update-details', [ControllerUser::class, 'updateDetails'])->name('user.update.details');
 
 Route::middleware(['auth', AdminAuthentication::class])->group(function () {
     Route::get('/admin', [ControllerAdmin::class, 'index'])->name('admin.index');
@@ -123,8 +123,8 @@ Route::middleware(['auth', AdminAuthentication::class])->group(function () {
     Route::get('/admin/search', [ControllerAdmin::class, 'search'])->name('admin.search');
 
     Route::get('/account-settings', [ControllerAdmin::class, 'dashboard'])->name('admin.settings');
-    Route::put('/update-details', [ControllerAdmin::class, 'updateDetails'])->name('admin.updateDetails');
-    Route::put('/update-password', [ControllerAdmin::class, 'updatePassword'])->name('admin.updatePassword');
+    Route::put('admin/update-details', [ControllerAdmin::class, 'updateDetails'])->name('admin.updateDetails');
+    Route::put('admin/update-password', [ControllerAdmin::class, 'updatePassword'])->name('admin.updatePassword');
 
     Route::get('/admin/users', [ControllerAdmin::class, 'usersWithOrderCount'])->name('admin.users');
     Route::delete('/admin/user/remove/{id}', [ControllerAdmin::class, 'remove_user'])->name('admin.user.remove');
